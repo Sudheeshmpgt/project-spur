@@ -3,9 +3,9 @@ const UserModel = require('../model/userSchema');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const SERVICESID = "VAd496599616d87e25db4a2f957d099860"
-const AccountSID = "AC29a114f949bfb19009d77419bac06b05"
-const AuthToken = "2b62a49300c3f52be8b072e43db739ee"
+const SERVICESID = process.env.SERVICE_ID;
+const AccountSID = process.env.ACCOUNT_SID;
+const AuthToken = process.env.AUTH_TOKEN; 
 const client = require('twilio')(AccountSID, AuthToken)
 
 
