@@ -22,7 +22,7 @@
   .sb2:before {
     content: "";
     width: 0px;
-    height: 0px;
+    height: 0px; 
     position: absolute;
     border-left: 10px solid #cce8ff;
     border-right: 10px solid transparent;

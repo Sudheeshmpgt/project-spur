@@ -5,12 +5,12 @@ const jwt = require('jsonwebtoken');
 
 const SERVICESID = process.env.SERVICE_ID;
 const AccountSID = process.env.ACCOUNT_SID;
-const AuthToken = process.env.AUTH_TOKEN; 
+const AuthToken = process.env.AUTH_TOKEN;
 const client = require('twilio')(AccountSID, AuthToken)
 
 
-//user signup
-exports.registration = async (req, res) => {
+
+const registration = async (req, res) => {
     try {
         const { name, phone, email, password, interviewer } = req.body;
         if (interviewer) {
@@ -52,7 +52,7 @@ exports.registration = async (req, res) => {
     }
 }
 
-exports.login = async (req, res) => {
+const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await UserModel.findOne({ email: email })
@@ -82,7 +82,7 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.otpLogin = async (req, res) => {
+const otpLogin = async (req, res) => {
     try {
         client.verify
             .services(SERVICESID)
@@ -97,7 +97,7 @@ exports.otpLogin = async (req, res) => {
     }
 }
 
-exports.otpVerify = async (req, res) => {
+const otpVerify = async (req, res) => {
     try {
         const { otp, phone } = req.body
         client.verify
@@ -129,6 +129,66 @@ exports.otpVerify = async (req, res) => {
                 })()
             })
     } catch (error) {
-        res.send( error )
+        res.send(error)
     }
 }
+
+const updateUserData = async (req, res) => {
+    try {
+        const user = await UserModel.findById(req.params.id)
+        if (user) {
+            user.name = req.body.name || user.name
+            user.phone = req.body.phone || user.phone
+            user.email = req.body.email || user.email
+            user.about = req.body.about || user.about
+            user.experience = req.body.experience || user.experience
+            user.profileImg = req.file ? req.file.path : '' || user.profileImg
+
+            const updatedUser = await user.save()
+            res.send({ message: "User Updated Successfully", user: updatedUser })
+        } else {
+            res.send({ message: "Request failed" })
+        }
+    } catch (error) {
+        res.send({ message: "Bad request", err: error })
+    }
+}
+
+const getUserData = async (req, res) => {
+    try {
+        const user = await UserModel.findById(req.params.id)
+        if (user) {
+            res.send({ message: "Successful", user: user })
+        } else {
+            res.send({ message: "Error" })
+        }
+    } catch (error) {
+        res.send({ message: "Bad request", err: error })
+    }
+}
+
+const addConnection = async (req, res) => {
+    try {
+        const {userId, connectionId} = req.body
+        const user = await UserModel.findById(userId)
+        const checkSelf = userId === connectionId
+        if (user && !checkSelf) {
+            const check = user.connections.includes(connectionId) 
+            if (check) {
+                res.send({ message: "Connection already exists" })
+            } else {
+            const conn = await UserModel.updateOne({ _id: userId }, { $push: { connections: connectionId } })
+            res.send({ message: "Connection added successfully"})
+            } 
+        }
+        else { 
+            res.send({ message: "Request failed" })
+        }
+    } catch (error) {
+        res.status(500).send({ message: "Bad request", err: error })
+    }
+}
+
+
+
+module.exports = { registration, login, otpLogin, otpVerify, updateUserData, getUserData, addConnection }

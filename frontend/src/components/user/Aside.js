@@ -15,6 +15,8 @@ function Aside() {
             navigate('/')
         } else {
             const name = localStorage.getItem('userName')
+            const image = localStorage.getItem('userImg')
+            const about = localStorage.getItem('userAbout')
             setName(name)
         }
     }, [])
@@ -26,7 +28,7 @@ function Aside() {
                     <Box sx={{ width: '100%', height: 480, backgroundColor: 'secondary.main', borderRadius: '15px' }}>
                         <Box sx={{ width: '100%', height: 80, backgroundColor: 'white', borderRadius: '15px 15px 0 0' }}></Box>
                         <Paper sx={{width:120, m:'0 auto', borderRadius:15}}>
-                            <Avatar sx={{ width: 120, height: 120, m: '-55px auto', elevation: 10 }} />
+                            <Avatar src={user && user.profileImg} sx={{ width: 120, height: 120, m: '-55px auto', elevation: 10 }} />
                         </Paper>
                         <Box width='90%' borderBottom={1} borderColor='rgba(0, 0, 0, 0.38)' m='0 auto' >
                             <Typography fontSize={{ sm: '1.1rem' }}
@@ -35,7 +37,7 @@ function Aside() {
                                 textAlign='center'
                                 fontFamily='Poppins, sans-serif'>{user.name ? user.name : name}</Typography>
                             <Typography fontSize={{ sm: '0.9rem' }} color='#757575' textAlign='center' mb={1} >
-                                MERN stack developer
+                                {user && user.about}
                             </Typography>
                         </Box>
                         <Box width='90%' borderBottom={1} borderColor='rgba(0, 0, 0, 0.38)' m='0 auto'>

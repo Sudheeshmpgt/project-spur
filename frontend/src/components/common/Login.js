@@ -1,11 +1,11 @@
 import { Box, Button, Grid, Link, Paper, TextField, Typography } from '@mui/material'
-import axios from '../axiosinstance';
+import axios from '../../axiosinstance';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom'
-import Swal from 'sweetalert2';
+import Toast from './sweetAlert';
 import { useDispatch } from 'react-redux'
-import { login } from '../features/userData'
+import { login } from '../../features/userData'
 
 function Login() {
   const navigate = useNavigate();
@@ -16,41 +16,34 @@ function Login() {
   const [phone, setPhone] = useState('');
   const [otpValue, setOtpValue] = useState('');
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-start',
-    showConfirmButton: false,
-    timer: 3000,
-    didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-  })
+
   const logOnSubmit = (data) => {
     const { email, password } = data
     if (email && password) {
-      axios.post("user/api/login", data)
+      axios.post("api/user/login", data)
         .then((res) => {
-          if (res.data.user && !res.data.user.block) {
-            const message = res.data.message
-            Toast.fire({
-              icon: 'success',
-              title: message
-            })
-            const token = res.data.token
-            localStorage.setItem("usertoken", token)
-            localStorage.setItem("userId", res.data.user._id)
-            localStorage.setItem("userName", res.data.user.name)
-            localStorage.setItem("userPhone", res.data.user.phone)
-            localStorage.setItem("userEmail", res.data.user.email)
-            localStorage.setItem("interviewer", res.data.user.interviewer)
-            dispatch(login(res.data.user))
-            navigate('/home')
-          } else {
+          if (res.data.user && res.data.user.block) {
             Toast.fire({
               icon: 'warning',
               title: 'Account Blocked'
             })
+          } else {
+            if (res.data.user && !res.data.user.block) {
+              const message = res.data.message
+              Toast.fire({
+                icon: 'success',
+                title: message
+              })
+              const token = res.data.token
+              localStorage.setItem("usertoken", token)
+              dispatch(login(res.data.user))
+              navigate('/home')
+            } else {
+              Toast.fire({
+                icon: 'error',
+                title: 'Invalid credentials'
+              })
+            }
           }
         }).catch((e) => {
           console.log(e)
@@ -72,7 +65,7 @@ function Login() {
     const { phone } = data
     setPhone(phone)
     if (phone) {
-      axios.post("user/api/otplogin", data)
+      axios.post("api/user/otplogin", data)
       setOtpStatus(!otpStatus)
     }
   }
@@ -83,7 +76,7 @@ function Login() {
       phone: phone
     }
     if (otpValue) {
-      axios.post("user/api/otpsubmit", values)
+      axios.post("api/user/otpsubmit", values)
         .then((res) => {
           if (res.data.user && !res.data.user.block) {
             const message = res.data.message
@@ -93,11 +86,7 @@ function Login() {
             })
             const token = res.data.token
             localStorage.setItem("usertoken", token)
-            localStorage.setItem("userId", res.data.user._id)
-            localStorage.setItem("userName", res.data.user.name)
-            localStorage.setItem("userPhone", res.data.user.phone)
-            localStorage.setItem("userEmail", res.data.user.email)
-            localStorage.setItem("interviewer", res.data.user.interviewer)
+            dispatch(login(res.data.user))
             navigate('/home')
           } else {
             Toast.fire({
@@ -106,7 +95,6 @@ function Login() {
             })
           }
         }).catch((e) => {
-          console.log(e)
           Toast.fire({
             icon: 'error',
             title: 'Something went wrong'
@@ -128,7 +116,7 @@ function Login() {
   const handleJoinNow = () => {
     navigate('/register')
   }
-  
+
   const handleOtpChange = (e) => {
     setOtpValue(e.target.value)
   }
@@ -237,37 +225,37 @@ function Login() {
               </form>
             }
             {
-            otpStatus && 
-            <form onSubmit={handleSubmit(otpSubmit)}>
-              <TextField
-                name='otp'
-                type='string'
-                {...register('otp', {
-                  required: 'This field is required',
-                  pattern: {
-                    value: /^\d{6}$/,
-                    message: 'Please enter a valid OTP'
-                  }
-                })}
-                onChange={handleOtpChange}
-                error={!!errors?.otp}
-                helperText={errors?.otp ? errors.otp.message : null}
-                size='small'
-                label='OTP'
-                fullWidth
-                sx={{ mb: 1 }}
-                placeholder='Enter OTP'
-              />
-              <Button
-                type='submit'
-                fullWidth
-                variant='contained'
-                size='small'
-                sx={{ fontSize: { xs: '0.8rem', sm: '1rem' }, mb: 2 }}>
-                Submit
-              </Button>
-            </form>
-          }
+              otpStatus &&
+              <form onSubmit={handleSubmit(otpSubmit)}>
+                <TextField
+                  name='otp'
+                  type='string'
+                  {...register('otp', {
+                    required: 'This field is required',
+                    pattern: {
+                      value: /^\d{6}$/,
+                      message: 'Please enter a valid OTP'
+                    }
+                  })}
+                  onChange={handleOtpChange}
+                  error={!!errors?.otp}
+                  helperText={errors?.otp ? errors.otp.message : null}
+                  size='small'
+                  label='OTP'
+                  fullWidth
+                  sx={{ mb: 1 }}
+                  placeholder='Enter OTP'
+                />
+                <Button
+                  type='submit'
+                  fullWidth
+                  variant='contained'
+                  size='small'
+                  sx={{ fontSize: { xs: '0.8rem', sm: '1rem' }, mb: 2 }}>
+                  Submit
+                </Button>
+              </form>
+            }
             <Typography
               textAlign='center'
               fontFamily='Poppins,san-serif'>

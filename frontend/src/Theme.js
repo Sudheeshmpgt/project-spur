@@ -29,6 +29,11 @@ export const Theme = createTheme({
         }
       }
     },
+    MuiIconButton:{
+      defaultProps:{
+        disableRipple: true,
+      }
+    },
     MuiButtonBase:{
       defaultProps:{
         disableRipple: true,

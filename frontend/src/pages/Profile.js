@@ -1,7 +1,7 @@
 import React from 'react'
 import {Grid} from '@mui/material'
-import Header from '../components/Header'
-import TopDesign from '../components/TopDesign'
+import Header from '../components/common/Header'
+import TopDesign from '../components/common/TopDesign'
 import ProfileDesign from '../components/user/ProfileDesign'
 
 function Profile() {

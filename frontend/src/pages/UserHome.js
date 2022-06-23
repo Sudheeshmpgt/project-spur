@@ -1,12 +1,12 @@
-import { Box, Grid, Paper } from '@mui/material'
+import { Box, Grid } from '@mui/material'
 import React, { useEffect } from 'react'
-import Header from '../components/Header'
-import TopDesign from '../components/TopDesign'
+import Header from '../components/common/Header'
+import TopDesign from '../components/common/TopDesign'
 import Aside from '../components/user/Aside'
-import ChatAside from '../components/user/ChatAside'
-import CreatePost from '../components/CreatePost'
-import Posts from '../components/Posts'
-import '../components/Scroll.css'
+import ChatAside from '../components/common/ChatAside'
+import CreatePost from '../components/common/CreatePost'
+import Posts from '../components/common/Posts'
+import '../components/common/Scroll.css'
 import { useSelector } from 'react-redux'
 import InterAside from '../components/interviewer/InterAside'
 import { useNavigate } from 'react-router-dom'
@@ -34,7 +34,7 @@ function UserHome() {
               </Box>
               <Box sx={{ width: '50%', height: 'auto', display: 'flex', flexDirection: 'column' }}>
                 <CreatePost />
-                <Box className='scrollbar-hidden' width='100%' sx={{ mt: -7.5, overflow: 'scroll' }}>
+                <Box className='scrollbar-hidden' width='100%' sx={{ mt: -8.0, overflow: 'scroll' }}>
                   <Posts />
                 </Box>
               </Box>
@@ -49,7 +49,7 @@ function UserHome() {
                </Box>
                <Box sx={{ width: '50%', height: 'auto', display: 'flex', flexDirection: 'column' }}>
                  <CreatePost />
-                 <Box className='scrollbar-hidden' width='100%' sx={{ mt: -7.5, overflow: 'scroll' }}>
+                 <Box className='scrollbar-hidden' width='100%' sx={{ mt: -8.0, overflow: 'scroll' }}>
                    <Posts />
                  </Box>
                </Box>

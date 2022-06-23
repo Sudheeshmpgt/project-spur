@@ -3,35 +3,45 @@ const mongoose = require('mongoose');
 require('dotenv').config;
 
 const userSchema = new mongoose.Schema({
-    name:{
+    name: {
         type: String,
         required: true
     },
-    phone:{
+    phone: {
         type: Number,
         required: true
     },
-    email:{
+    email: {
         type: String,
         unique: true,
-        required:true
+        required: true
     },
-    password:{
+    password: {
         type: String,
         required: true
     },
-    interviewer:{
-        type:Boolean
-    }, 
+    about: {
+        type: String,
+        default: ''
+    },
+    interviewer: {
+        type: Boolean
+    },
     profileImg: {
         type: String
     },
-    experience:{
-        type: String,
+    experience: {
+        type: Number,
+        default: 0
     },
-    block:{
-        type:Boolean,
-        default:false
+    connections: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    }],
+    block: {
+        type: Boolean,
+        default: false
     },
 })
 

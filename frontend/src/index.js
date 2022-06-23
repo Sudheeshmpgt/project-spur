@@ -5,23 +5,22 @@ import './index.css';
 import App from './App';
 import { Theme } from './Theme'
 import { ThemeProvider } from '@mui/material/styles'
-import {configureStore} from '@reduxjs/toolkit'
-import {Provider} from 'react-redux'
-import userReducer from './features/userData'
+import { Provider } from 'react-redux'
+import store from './store'
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 
-const store = configureStore({
-  reducer:{
-    userData: userReducer
-  }
-})
+const persistor = persistStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-  <Provider store={store}>
-    <ThemeProvider theme={Theme}>
-      <App />
-    </ThemeProvider>
-  </Provider>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <ThemeProvider theme={Theme}>
+          <App />
+        </ThemeProvider>
+      </PersistGate>
+    </Provider>
   </BrowserRouter>
 );

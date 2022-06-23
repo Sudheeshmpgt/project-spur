@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
-import axios from '../axiosinstance'
+import axios from '../../axiosinstance'
+import Toast from './sweetAlert'
 
 function JoinNow() {
     const navigate = useNavigate();
@@ -11,25 +12,13 @@ function JoinNow() {
     const [value, setValue] = useState('fresher');
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-start',
-        width:'400px',
-        showConfirmButton: false,
-        timer: 5000,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    })
-
     const regOnSubmit = (data) => {
-        const { name, phone, email, password, confirmPassword } = data
+        const { name, phone, email, password, confirmPassword, experience } = data
         const values = {
-            name, email, phone, password, confirmPassword, interviewer, experience: value 
+            name, email, phone, password, confirmPassword, interviewer, experience
         }
         if (name && phone && email && password && (password === confirmPassword)) {
-            axios.post("user/api/registration", values)
+            axios.post("api/user/registration", values)
                 .then((res) => {
                     const message = res.data.message
                     navigate('/login')
@@ -190,6 +179,23 @@ function JoinNow() {
                                         <FormControlLabel sx={{ marginLeft: { sm: 7.5, xs: 4.5 } }} value="experienced" control={<Radio />} label="Experienced" />
                                     </RadioGroup>
                                 </FormControl>
+                            }
+                            {
+                                value === "experienced" &&
+                                <TextField
+                                    name='experience'
+                                    type='number'
+                                    {...register('experience', {
+                                        required: 'This field is required',
+                                    })}
+                                    error={!!errors?.experience}
+                                    helperText={errors?.experience ? errors.experience.message : null}
+                                    variant='outlined'
+                                    sx={{ color: '', mb: 1.2 }}
+                                    size='small'
+                                    label='Experience'
+                                    fullWidth
+                                    placeholder='No. of years'/>
                             }
                             <Button
                                 type='submit'

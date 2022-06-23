@@ -1,24 +1,31 @@
 import { Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Paper, Toolbar, Tooltip, Typography } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { login } from '../../features/userData'
 
 function Header() {
     const user = useSelector(state => state.userData.value)
     // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [token, setToken] = useState('')
+    const [image, setImage] = useState('')
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    useEffect(() => {
     const token = localStorage.getItem("usertoken")
+    const image = localStorage.getItem("userImg")
+    setToken(token)
+    setImage(image)
+    },[])
 
     const logout = () => {
         handleCloseUserMenu();
+        dispatch(login(''))
         localStorage.removeItem("usertoken")
-        localStorage.removeItem("userId")
-        localStorage.removeItem("userName")
-        localStorage.removeItem("userPhone")
-        localStorage.removeItem("userEmail")
-        localStorage.removeItem("interviewer")
         navigate('/')
     }
 
@@ -162,8 +169,8 @@ function Header() {
                                 <Box sx={{ flexGrow: 0 }}>
                                     <Tooltip title="Open settings">
                                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                            <Paper sx={{borderRadius:7, width:53, height:53, zIndex:1}}> 
-                                            <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" sx={{ width: 50, height: 50, m:'0.1rem auto'}} />
+                                            <Paper sx={{borderRadius:7, width:50, height:50, zIndex:1}}> 
+                                            <Avatar alt="Remy Sharp" src={ user.profileImg} sx={{ width: 50, height: 50}} />
                                             </Paper>
                                             <Paper sx={{ width: 50, borderRadius: 3}}>
                                             <Box sx={{

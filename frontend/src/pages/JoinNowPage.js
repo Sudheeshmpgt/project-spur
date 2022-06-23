@@ -1,8 +1,8 @@
 import { Box, Grid } from '@mui/material'
 import React from 'react'
-import Header from '../components/Header'
-import JoinNow from '../components/JoinNow'
-import TopDesign from '../components/TopDesign'
+import Header from '../components/common/Header'
+import JoinNow from '../components/common/JoinNow'
+import TopDesign from '../components/common/TopDesign'
 
 function JoinNowPage() {
     return (
