@@ -16,6 +16,8 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
@@ -154,89 +156,86 @@ function Request({ requestData }) {
         </Box>
         <Box sx={{ display: "flex" }}>
           <CalendarTodayIcon sx={{ fontSize: 25, mt: 1.5 }} />
-          {
-            requestData.confirmed ? 
-            (
-              <Typography fontSize="1.1rem" sx={{ mt: 1.5, ml: 1.5 }}>
-                {dayjs(requestData.date).format("MMM, DD YYYY")} 
-              </Typography>
-            ):(
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MobileDatePicker
-              label="Date"
-              inputFormat="dd/MM/yyyy"
-              value={date}
-              onChange={handleDateChange}
-              renderInput={(params) => (
-                <TextField
-                  component={Paper}
-                  size="small"
-                  sx={{ mt: 1, ml: 1.5, width: 190, borderRadius: "5px" }}
-                  {...params}
-                />
-              )}
-            />
-          </LocalizationProvider>
-            )
-          }
+          {requestData.confirmed ? (
+            <Typography fontSize="1.1rem" sx={{ mt: 1.5, ml: 1.5 }}>
+              {dayjs(requestData.date).format("MMM, DD YYYY")}
+            </Typography>
+          ) : (
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <MobileDatePicker
+                label="Date"
+                inputFormat="dd/MM/yyyy"
+                value={date}
+                onChange={handleDateChange}
+                renderInput={(params) => (
+                  <TextField
+                    component={Paper}
+                    size="small"
+                    sx={{ mt: 1, ml: 1.5, width: 190, borderRadius: "5px" }}
+                    {...params}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+          )}
         </Box>
         <Box sx={{ display: "flex" }}>
           <ScheduleIcon sx={{ fontSize: 25, mt: 1.8 }} />
-          {
-            requestData.confirmed ?
-            (
-              <Typography fontSize="1.1rem" sx={{ mt: 1.5, ml: 1.5 }}>
-                {dayjs(requestData.time).format("hh:mm a")} 
-              </Typography>
-            ):(
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <TimePicker
-              label="Time"
-              value={time}
-              onChange={handleTimeChange}
-              renderInput={(params) => (
-                <TextField
-                  component={Paper}
-                  size="small"
-                  sx={{ mt: 1, ml: 1.5, width: 190, borderRadius: "5px" }}
-                  {...params}
-                />
-              )}
-            />
-          </LocalizationProvider>
-            )
-          }
+          {requestData.confirmed ? (
+            <Typography fontSize="1.1rem" sx={{ mt: 1.5, ml: 1.5 }}>
+              {dayjs(requestData.time).format("hh:mm a")}
+            </Typography>
+          ) : (
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <TimePicker
+                label="Time"
+                value={time}
+                onChange={handleTimeChange}
+                renderInput={(params) => (
+                  <TextField
+                    component={Paper}
+                    size="small"
+                    sx={{ mt: 1, ml: 1.5, width: 190, borderRadius: "5px" }}
+                    {...params}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+          )}
         </Box>
         <Box sx={{ display: "flex" }}>
           <VideocamIcon sx={{ fontSize: 25, mt: 1.8 }} />
-          <TextField
-            size="small"
-            onChange={(e) => handleLinkChange(e)}
-            component={Paper}
-            sx={{ mt: 1, ml: 1.5, width: 190, borderRadius: "5px" }}
-          ></TextField>
+          {requestData.confirmed ? (
+            <Typography fontSize="1.1rem" sx={{ mt: 1.5, ml: 1.5 }}>
+              {requestData.link}
+            </Typography>
+          ) : (
+            <TextField
+              size="small"
+              onChange={(e) => handleLinkChange(e)}
+              component={Paper}
+              sx={{ mt: 1, ml: 1.5, width: 190, borderRadius: "5px" }}
+            ></TextField>
+          )}
         </Box>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
           {cancel ? (
             <Button
-              onClick={handleCancel}
-              variant="contained"
-              color="error"
-              sx={{ borderRadius: "15px" }}
-              disabled
-            >
-              Cancelled
-            </Button>
+            variant="contained"
+            sx={{ borderRadius: "15px" }}
+            disabled
+          >
+            <HighlightOffIcon sx={{fontSize : 25, mr:0.7, color:'#ff3333'}}></HighlightOffIcon>
+            <Typography color='#ff3333' fontSize='1.2rem'>Cancelled</Typography>
+          </Button>
           ) : submit ? (
-            <Button
-              onClick={handleCancel}
-              variant="contained"
-              color="error"
-              sx={{ borderRadius: "15px" }}
-              disabled
-            >
-              Confirmed
-            </Button>
+            <Box
+                  variant="contained"
+                  sx={{ borderRadius: "15px", p:1, display:'flex' }}  
+                >
+                  <CheckCircleOutlineIcon sx={{fontSize : 25, mr:0.7, color:'green'}}></CheckCircleOutlineIcon>
+                  <Typography color='green' fontSize='1.2rem'>Confirmed</Typography>
+                </Box>
           ) : (
             <>
               <Button

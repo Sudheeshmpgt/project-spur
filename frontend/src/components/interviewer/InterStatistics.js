@@ -22,7 +22,7 @@ function Statistics({userData}) {
           };
 
           const getUpcommingData = () => {
-            axios.get(`api/interview/user/upcomming/${userData._id}`, { 
+            axios.get(`api/interview/interviewer/upcomming/${userData._id}`, {
               headers: {
                 authToken: localStorage.getItem("usertoken"),
               },

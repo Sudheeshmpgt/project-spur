@@ -5,10 +5,16 @@ import Request from "./Request";
 import axios from "../../../axiosinstance";
 import { useSelector } from "react-redux";
 import Toast from "../../Sweetalert/sweetAlert";
+import {useNavigate} from 'react-router-dom'
 
 function AllRequests() {
   const user = useSelector((state) => state.userData.value);
   const [request, setRequest] = useState([]) 
+  const navigate = useNavigate()
+
+  const handleCloseClick =() =>{
+    navigate('/home')
+  }
 
   useEffect(() => {
     axios
@@ -54,7 +60,7 @@ function AllRequests() {
           >
             Requests
           </Typography>
-          <IconButton>
+          <IconButton onClick={handleCloseClick}>
             <CloseIcon sx={{ fontSize: "1.5rem" }} />
           </IconButton>
         </Box>

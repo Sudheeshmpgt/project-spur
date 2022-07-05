@@ -22,7 +22,7 @@ function UserHome() {
   }, [navigate]);
   return (
     <Layouts>
-      <Grid container>
+      <Grid>
         {user.interviewer ? (
           <Box
             sx={{
@@ -60,24 +60,20 @@ function UserHome() {
           <Box
             sx={{
               width: "100%",
-              height:'auto',
               display: "flex",
               backgroundColor: "",
               justifyContent: "space-evenly",
             }}
           >
-            <Box sx={{ 
-              width: "25%", 
-              display: "flex", ml: "auto", mr: "auto" }}>
+            <Box sx={{ width: "25%", display: "flex", ml: "auto", mr: "auto" }}>
               <Aside />
             </Box>
             <Box
               sx={{
-                width: "50%", 
+                width: "50%",
                 height: "auto",
                 display: "flex",
                 flexDirection: "column",
-                backgroundColor: "",
               }}
             >
               <CreatePost />

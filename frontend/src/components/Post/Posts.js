@@ -211,10 +211,9 @@ function Posts() {
   return (
     <Grid container>
       <Box
-        width="100%"
         height={470}
         className="scrollbar-hidden"
-        sx={{ overflow: "scroll", borderRadius: "15px" }}
+        sx={{ overflow: "scroll", borderRadius: "15px", width:'100%' }}
       >
         {postsData &&
           postsData.map((post, index) => (

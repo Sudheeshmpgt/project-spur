@@ -8,15 +8,16 @@ import {
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "../../axiosinstance"
 
 function Aside() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.userData.value);
   const [name, setName] = useState("");
 
-  const handleClick = () => {
-    navigate('/notifications')
-  }
+  const [postCount, setPostCount] = useState(0);
+  const [pending, setPending] = useState(0);
+  const [completed, setCompleted] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem("usertoken");
@@ -26,7 +27,45 @@ function Aside() {
       const name = localStorage.getItem("userName");
       setName(name);
     }
-  }, []);
+  }, [navigate]);
+
+  useEffect(() => {
+      const getPostData = () => {
+          axios.get(`api/post/posts/${user._id}`, {
+            headers: {
+              authToken: localStorage.getItem("usertoken"),
+            },
+          })
+          .then((res)=>{
+            setPostCount(res.data.postsCount)
+          })
+        };
+
+        const getUpcommingData = () => {
+          axios.get(`api/interview//user/upcomming/${user._id}`, {
+            headers: {
+              authToken: localStorage.getItem("usertoken"),
+            },
+          })
+          .then((res)=>{
+            setPending(res.data.pendingCount)
+            setCompleted(res.data.completedCount)
+          })
+        };
+
+        getPostData();
+        getUpcommingData();
+  },[user]) 
+
+  const handleClickNotification = () => {
+    navigate('/notifications')
+  }
+
+  const handleClickUpcomming = () => {
+    navigate('/upcomming')
+  }
+
+  
 
   return (
     <Grid container>
@@ -103,7 +142,7 @@ function Aside() {
                   Networks
                 </Typography>
                 <Typography fontSize={{ sm: "1rem" }} mt={2}>
-                  100
+                  {user?.connections?.length}
                 </Typography>
               </Box>
               <Box
@@ -118,7 +157,22 @@ function Aside() {
                   Posts
                 </Typography>
                 <Typography fontSize={{ sm: "1rem" }} mt={1}>
-                  10
+                  {postCount}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "80%",
+                  m: "0 auto",
+                }}
+              >
+                <Typography fontSize={{ sm: "1rem" }} mt={1}>
+                  Interviews
+                </Typography>
+                <Typography fontSize={{ sm: "1rem" }} mt={1}>
+                  {completed}
                 </Typography>
               </Box>
               <Box
@@ -130,42 +184,22 @@ function Aside() {
                 }}
               >
                 <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1.5}>
-                  Interviews
+                Pending Requests
                 </Typography>
                 <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1.5}>
-                  5
+                  {pending}
                 </Typography>
               </Box>
             </Box>
             <Box width="90%" m="0 auto">
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
                   width: "80%",
                   m: "0 auto",
                 }}
               >
-                <Typography fontSize={{ sm: "1rem", cursor: "pointer" }} mt={2}>
-                  Pending Requests
-                </Typography>
-                <Typography fontSize={{ sm: "1rem" }} mt={2}>
-                  5
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "80%",
-                  m: "0 auto",
-                }}
-              >
-                <Typography onClick={handleClick} fontSize={{ sm: "1rem", cursor: "pointer" }} mt={1}>
+                <Typography onClick={handleClickNotification} fontSize={{ sm: "1rem", cursor: "pointer" }} mt={2}>
                   Notifications
-                </Typography>
-                <Typography fontSize={{ sm: "1rem" }} mt={1}>
-                  3
                 </Typography>
               </Box>
               <Box
@@ -177,14 +211,12 @@ function Aside() {
                 }}
               >
                 <Typography
+                 onClick = {handleClickUpcomming}
                   fontSize={{ sm: "1rem", cursor: "pointer" }}
                   mt={1}
                   mb={1.5}
                 >
                   Upcomming
-                </Typography>
-                <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1.5}>
-                  0
                 </Typography>
               </Box>
             </Box>

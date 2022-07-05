@@ -24,6 +24,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../../Features/userData";
 import CloseIcon from "@mui/icons-material/Close";
 import PasswordChange from "./PasswordChange";
+import InterStatistics from "../Interviewer/InterStatistics"
 
 function ProfileDesign() {
   const {
@@ -331,7 +332,13 @@ function ProfileDesign() {
                 </Button>
               </Box>
               <Box sx={{ width: "35%", m: "20px auto" }}>
-                <Statistics />
+                {
+                  users.interviewer ? (
+                    <InterStatistics userData={users}/> 
+                  ):(
+                    <Statistics userData={users} />
+                  )
+                } 
               </Box>
             </Box>
           </Box>
@@ -354,7 +361,8 @@ function ProfileDesign() {
         >
           <Box
             sx={{
-              width: "100%",
+              width: "95%",
+              m:'0 auto',
               height: 50,
               borderBottom: 1,
               borderColor: "rgba(0, 0, 0, 0.38)",

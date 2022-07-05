@@ -7,6 +7,8 @@ import Swal from "sweetalert2";
 import axios from "../../../axiosinstance";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 function Notification({ notificationData }) {
   const [userSubmit, setUserSubmit] = useState(false);
@@ -118,21 +120,20 @@ function Notification({ notificationData }) {
               {userCancel ? (
                 <Button
                   variant="contained"
-                  color="error"
                   sx={{ borderRadius: "15px" }}
                   disabled
                 >
-                  Cancelled
+                  <HighlightOffIcon sx={{fontSize : 25, mr:0.7, color:'#ff3333'}}></HighlightOffIcon>
+                  <Typography color='#ff3333' fontSize='1.2rem'>Cancelled</Typography>
                 </Button>
               ) : userSubmit ? (
-                <Button
+                <Box
                   variant="contained"
-                  color="error"
-                  sx={{ borderRadius: "15px" }}
-                  disabled
+                  sx={{ borderRadius: "15px", p:1, display:'flex' }}  
                 >
-                  Confirmed
-                </Button>
+                  <CheckCircleOutlineIcon sx={{fontSize : 25, mr:0.7, color:'green'}}></CheckCircleOutlineIcon>
+                  <Typography color='green' fontSize='1.2rem'>Confirmed</Typography>
+                </Box>
               ) : (
                 <>
                   <Button

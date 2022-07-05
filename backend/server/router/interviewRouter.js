@@ -7,8 +7,10 @@ const {
   getNotification,
   userConfirmation,
   userCancellation,
-  getRequestData
-} = require("../controller/interviewController");
+  getRequestData,
+  getUpcommingData,
+  getInterUpcommingData
+} = require("../controller/interviewController"); 
 
 route.post("/", interviewRequest);
 route.get("/:id", getRequest);
@@ -18,5 +20,7 @@ route.get("/user/:id", getNotification);
 route.put("/user/confirm", userConfirmation);
 route.put("/user/cancel", userCancellation);
 route.get("/user/request/:id", getRequestData);
+route.get("/user/upcomming/:id", getUpcommingData)
+route.get("/interviewer/upcomming/:id", getInterUpcommingData)
 
 module.exports = route;

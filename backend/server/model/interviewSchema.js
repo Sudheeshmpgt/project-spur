@@ -50,6 +50,9 @@ const interviewSchema = new mongoose.Schema(
     paid:{
       type: Boolean,
       default: false,
+    },
+    status:{
+      type: String,
     }
   },{ timestamps: true }
 );

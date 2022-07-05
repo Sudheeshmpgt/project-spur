@@ -8,22 +8,44 @@ function InterAside() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.userData.value);
   const [name, setName] = useState("");
-  const [postCount, setPostCount] = useState('')
+  const [postCount, setPostCount] = useState(0);
+  const [upcomming,  setUpcomming] = useState(0);  
+
 
   const handleRequestClick = () =>{
     navigate('/requests')
   }
 
-  const getPostData = () => {
-    axios.get(`api/post/posts/${user._id}`, {
-      headers: {
-        authToken: localStorage.getItem("usertoken"),
-      },
-    })
-    .then((res)=>{
-      setPostCount(res.data.postsCount)
-    })
-  };
+  const handleUpcommingClick = () =>{
+    navigate('/upcommings')
+  }
+
+  useEffect(()=>{
+    const getPostData = () => {
+      axios.get(`api/post/posts/${user._id}`, {
+        headers: {
+          authToken: localStorage.getItem("usertoken"),
+        },
+      })
+      .then((res)=>{
+        setPostCount(res.data.postsCount)
+      })
+    };
+
+    const getUpcommingData = () => {
+      axios.get(`api/interview/inter/upcomming/${user._id}`, {
+        headers: {
+          authToken: localStorage.getItem("usertoken"),
+        },
+      })
+      .then((res)=>{
+        setUpcomming(res.data.upcommingCount)
+      })
+    };
+
+    getPostData();
+    getUpcommingData();
+  },[user])
 
   useEffect(() => {
     const token = localStorage.getItem("usertoken");
@@ -33,8 +55,8 @@ function InterAside() {
       const name = localStorage.getItem("userName");
       setName(name);
     }
-    getPostData();
-  }, []);
+  }, [navigate]);
+
   return (
     <Grid container>
       <Box width="100%">
@@ -141,11 +163,11 @@ function InterAside() {
                   m: "0 auto",
                 }}
               >
-                <Typography fontSize={{ sm: "1rem" }} mt={2} >
+                <Typography onClick={handleUpcommingClick} fontSize={{ sm: "1rem",  cursor:'pointer' }} mt={2} >
                   Upcoming
                 </Typography>
                 <Typography fontSize={{ sm: "1rem" }} mt={2} >
-                  1
+                  {upcomming}
                 </Typography>
               </Box>
               <Box
@@ -158,9 +180,6 @@ function InterAside() {
               >
                 <Typography onClick={handleRequestClick} fontSize={{ sm: "1rem", cursor:'pointer' }} mt={1} mb={1}>
                   Requests
-                </Typography>
-                <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1}>
-                  5
                 </Typography>
               </Box>
             </Box>

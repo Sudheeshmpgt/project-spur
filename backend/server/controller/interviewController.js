@@ -122,7 +122,7 @@ const userConfirmation = async (req, res) => {
     const { requestId } = req.body;
     const confirm = await InterviewModel.findByIdAndUpdate(
       { _id: requestId },
-      { userConfirmation: true, paid:true }
+      { userConfirmation: true, paid: true }
     );
     if (confirm) {
       res.status(200).send({ message: "Confirmed" });
@@ -176,6 +176,112 @@ const getRequestData = async (req, res) => {
   }
 };
 
+const getUpcommingData = async (req, res) => {
+  try {
+    const nowTime = new Date()
+    const requests = await InterviewModel.find({ userId: req.params.id });
+    if (requests.length !== 0) {
+      const requestData = await InterviewModel.populate(requests, {
+        path: "interviewerId",
+        select: [
+          "name",
+          "about",
+          "profileImg",
+          "_id",
+          "interviewer",
+          "email",
+          "phone",
+        ],
+      });
+      const upcomming = requestData.filter((data) => {
+        return data.userConfirmation === true && data.paid === true && (data.date.getTime() >= nowTime.getTime())
+      });
+      const upcommingCount = upcomming.length;
+
+      const pending = requestData.filter((data) => {
+        return data.confirmed === false && data.cancelled === false;
+      });
+      const pendingCount = pending.length;
+
+      const completed = requestData.filter((data) => {
+        return data.status === "completed";
+      });
+      const completedCount = completed.length;
+
+      upcomming.sort((dateA, dateB) => {
+        return dateB.createdAt - dateA.createdAt;
+      });
+      res.send({
+        message: "OK",
+        upcomming: upcomming,
+        pending: pending,
+        completed: completed,
+        upcommingCount: upcommingCount,
+        pendingCount: pendingCount,
+        completedCount: completedCount,
+      });
+    } else {
+      res.send({ message: "No requests found" });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+const getInterUpcommingData = async (req, res) => {
+  try {
+    const nowTime = new Date()
+    const requests = await InterviewModel.find({ interviewerId: req.params.id });
+    if (requests.length !== 0) {
+      const requestData = await InterviewModel.populate(requests, {
+        path: "userId",
+        select: [
+          "name",
+          "about",
+          "profileImg",
+          "_id",
+          "interviewer",
+          "email",
+          "phone",
+        ],
+      });
+      
+      const upcomming = requestData.filter((data) => {
+        return data.userConfirmation === true && data.paid === true && (data.date.getTime() >= nowTime.getTime())  
+      });
+      const upcommingCount = upcomming.length;
+
+     
+      const pending = requestData.filter((data) => {
+        return data.confirmed === false && data.cancelled === false;
+      });
+      const pendingCount = pending.length;
+
+      const completed = requestData.filter((data) => {
+        return data.status === "completed";
+      });
+      const completedCount = completed.length;
+
+      upcomming.sort((dateA, dateB) => {
+        return dateB.createdAt - dateA.createdAt;
+      });
+      res.send({
+        message: "OK",
+        upcomming: upcomming,
+        pending: pending,
+        completed: completed,
+        upcommingCount: upcommingCount,
+        pendingCount: pendingCount,
+        completedCount: completedCount,
+      });
+    } else {
+      res.send({ message: "No requests found" });
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
 module.exports = {
   interviewRequest,
   getRequest,
@@ -184,5 +290,7 @@ module.exports = {
   getNotification,
   userConfirmation,
   userCancellation,
-  getRequestData
+  getRequestData,
+  getUpcommingData,
+  getInterUpcommingData,
 };
