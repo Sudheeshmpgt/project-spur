@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
 import axios from '../../axiosinstance'
-import Toast from './sweetAlert'
+import Toast from '../Sweetalert/sweetAlert'
 
 function JoinNow() {
     const navigate = useNavigate();

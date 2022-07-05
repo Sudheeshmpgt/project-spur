@@ -6,12 +6,15 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { styled } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
 import axios from '../../axiosinstance';
-import Toast from './sweetAlert';
+import Toast from '../Sweetalert/sweetAlert';
 import { useSelector } from 'react-redux'
+import {useDispatch} from 'react-redux'
+import { createPost } from '../../Features/postData';
 
 function CreatePost() {
     const navigate = useNavigate()
     const user = useSelector(state => state.userData.value)
+    const dispatch = useDispatch();
     const { register, handleSubmit } = useForm()
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -47,6 +50,7 @@ function CreatePost() {
                         icon: 'success',
                         title: message
                     })
+                    dispatch(createPost(res.data.posts))
                     handleClose();
                 })
                 .catch(err => {
@@ -116,7 +120,7 @@ function CreatePost() {
                                 {
                                     image &&
                                     <Box sx={{width:'55%', m:'0 auto'}}> 
-                                        <img alt='image' src={image && URL.createObjectURL(image)} ></img>
+                                        <img alt='' src={image && URL.createObjectURL(image)} ></img>
                                     </Box>
                                 }
                             </Box>

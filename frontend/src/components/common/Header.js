@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import { login } from '../../features/userData'
+import { login } from '../../Features/userData'
+import { createPost } from '../../Features/postData'
 
 function Header() {
     const user = useSelector(state => state.userData.value)
@@ -25,6 +26,7 @@ function Header() {
     const logout = () => {
         handleCloseUserMenu();
         dispatch(login(''))
+        dispatch(createPost([]))
         localStorage.removeItem("usertoken")
         navigate('/')
     }

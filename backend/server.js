@@ -15,6 +15,8 @@ app.use('/api/user', require('./server/router/userRouter'))
 app.use('/api/post', require('./server/router/postRouter'))
 app.use('/api/conversations', require('./server/router/conversationRouter'))
 app.use('/api/messages', require('./server/router/messageRouter'))
+app.use('/api/interview', require('./server/router/interviewRouter'))
+app.use('/api/payment', require('./server/router/razorpayRouter'))
 
 
 const server = app.listen(PORT, () => {
@@ -28,12 +30,25 @@ const io = require('socket.io')(server, {
     }
 })
 
+let userArray = []
+
+
+const addUser = (user) => {
+    !userArray.includes(user._id) && userArray.push(user._id)
+} 
+
+const removeUser = (user) => {   
+    userArray.filter((data)=>data?._id !== user )    
+} 
+
 io.on("connection", (socket)=>{
-    console.log("connected to socket.io")
+    console.log("connected to socket.io")  
 
     socket.on("setup", (userData)=>{ 
         socket.join(userData._id)
         socket.emit("connected")
+        addUser(userData);
+        io.emit("online users", userArray)
     });
 
     socket.on("join chat", (room)=>{
@@ -53,9 +68,13 @@ io.on("connection", (socket)=>{
             }
     });
 
-    socket.off("setup", ()=>{
+    socket.on("disconnect", (userData)=>{
         console.log("User disconnected");
-        socket.leave(userData._id)   
+        socket.leave(userData._id)
+        removeUser(userData._id);   
+        io.emit("online users", userArray)
     })
 })
+
+
 

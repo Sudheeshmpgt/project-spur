@@ -5,8 +5,11 @@ import Home from './pages/Home'
 import LoginPage from './pages/LoginPage';
 import JoinNowPage from './pages/JoinNowPage';
 import UserHome from './pages/UserHome';
-import Profile from './pages/Profile';
-import Messenger from './pages/Messenger';
+import Profile from './pages/ProfilePage';
+import Messenger from './pages/MessengerPage';
+import InterviewRequestPage from './pages/InterviewRequestPage';
+import UserNotification from './pages/userNotification';
+import PaymentPage from './pages/PaymentPage';
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
         <Route path='/home' element={<UserHome/>} />
         <Route path='/profile' element={<Profile/>} /> 
         <Route path='/messenger' element={<Messenger/>} /> 
+        <Route path='/requests' element={<InterviewRequestPage/>} /> 
+        <Route path='/notifications' element={<UserNotification/>} />
+        <Route path='/payment' element={<PaymentPage/>} />
       </Routes>
   );
 }

@@ -1,19 +1,18 @@
-import { Box, Grid } from '@mui/material'
-import React from 'react'
-import Header from '../components/common/Header'
-import JoinNow from '../components/common/JoinNow'
-import TopDesign from '../components/common/TopDesign'
+import { Box, Grid } from "@mui/material";
+import React from "react";
+import JoinNow from "../components/UserRegister/JoinNow";
+import UserLayout from "../Layouts/userLayout";
 
 function JoinNowPage() {
-    return (
-        <Grid container>
-            <Header />
-            <TopDesign />
-            <Box width='100%'>
-                <JoinNow />
-            </Box>
-        </Grid>
-    )
+  return (
+    <UserLayout>
+      <Grid container>
+        <Box width="100%">
+          <JoinNow />
+        </Box>
+      </Grid>
+    </UserLayout>
+  );
 }
 
-export default JoinNowPage
+export default JoinNowPage;

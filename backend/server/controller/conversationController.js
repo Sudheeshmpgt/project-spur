@@ -3,7 +3,9 @@ const ConversationModel = require('../model/conversationSchema');
 const conversation = async (req, res) => {
     try {
         const { senderId, receiverId } = req.body;
-        const prevRecord = await ConversationModel.findOne({ members: { $in: [senderId, receiverId] } })
+        console.log(senderId, receiverId)
+        const prevRecord = await ConversationModel.findOne({ members: { $eq: [senderId, receiverId] } })
+        console.log('PR', prevRecord)
         if (!prevRecord) {
             const newConversation = new ConversationModel({
                 members: [senderId, receiverId],

@@ -3,9 +3,9 @@ import axios from '../../axiosinstance';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom'
-import Toast from './sweetAlert';
+import Toast from '../Sweetalert/sweetAlert';
 import { useDispatch } from 'react-redux'
-import { login } from '../../features/userData'
+import { login } from '../../Features/userData'
 
 function Login() {
   const navigate = useNavigate();

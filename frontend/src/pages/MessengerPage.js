@@ -1,16 +1,15 @@
 import { Box, Grid } from "@mui/material";
 import React, { useEffect } from "react";
+import UserLayout from "../Layouts/userLayout";
 import Aside from "../components/User/Aside";
 import ChatAside from "../components/Messenger/ChatAside";
-import CreatePost from "../components/Post/CreatePost";
-import Posts from "../components/Post/Posts";
 import "../components/common/Scroll.css";
 import { useSelector } from "react-redux";
 import InterAside from "../components/Interviewer/InterAside";
 import { useNavigate } from "react-router-dom";
-import Layouts from "../Layouts/userLayout";
+import MessengerDetails from "../components/Messenger/MessengerDetails";
 
-function UserHome() {
+function Messenger() {
   const user = useSelector((state) => state.userData.value);
   const navigate = useNavigate();
 
@@ -20,9 +19,10 @@ function UserHome() {
       navigate("/");
     }
   }, [navigate]);
+
   return (
-    <Layouts>
-      <Grid container>
+    <UserLayout>
+      <Grid>
         {user.interviewer ? (
           <Box
             sx={{
@@ -41,16 +41,10 @@ function UserHome() {
                 height: "auto",
                 display: "flex",
                 flexDirection: "column",
+                mt: 10,
               }}
             >
-              <CreatePost />
-              <Box
-                className="scrollbar-hidden"
-                width="100%"
-                sx={{ mt: -8.0, overflow: "scroll" }}
-              >
-                <Posts />
-              </Box>
+                <MessengerDetails />
             </Box>
             <Box sx={{ width: "25%" }}>
               <ChatAside />
@@ -60,34 +54,24 @@ function UserHome() {
           <Box
             sx={{
               width: "100%",
-              height:'auto',
               display: "flex",
               backgroundColor: "",
               justifyContent: "space-evenly",
             }}
           >
-            <Box sx={{ 
-              width: "25%", 
-              display: "flex", ml: "auto", mr: "auto" }}>
+            <Box sx={{ width: "25%", display: "flex", ml: "auto", mr: "auto" }}>
               <Aside />
             </Box>
             <Box
               sx={{
-                width: "50%", 
+                width: "50%",
                 height: "auto",
                 display: "flex",
                 flexDirection: "column",
-                backgroundColor: "",
+                mt: 10,
               }}
             >
-              <CreatePost />
-              <Box
-                className="scrollbar-hidden"
-                width="100%"
-                sx={{ mt: -8.0, overflow: "scroll" }}
-              >
-                <Posts />
-              </Box>
+              <MessengerDetails />
             </Box>
             <Box sx={{ width: "25%" }}>
               <ChatAside />
@@ -95,8 +79,8 @@ function UserHome() {
           </Box>
         )}
       </Grid>
-    </Layouts>
+    </UserLayout>
   );
 }
 
-export default UserHome;
+export default Messenger;

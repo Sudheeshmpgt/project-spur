@@ -18,7 +18,6 @@ function MessengerDetails() {
     const currentUser = useSelector(state => state.userData.value)
     const [currentChat, setCurrentChat] = useState(null)
     const [user, setUser] = useState(null)
-    console.log(user)
     const [newMessage, setNewMessage] = useState('')
     const [messages, setMessages] = React.useState([])
     const [socketConnected, setSocketConnected] = useState(false)
@@ -29,28 +28,6 @@ function MessengerDetails() {
         socket.emit("setup",currentUser)
         socket.on("connection", ()=>setSocketConnected(true))  
     },[])
-
-    const fetchMessages = () => {
-        const id = currentChat?._id
-        axios.get(`api/messages/${id}`, {
-            header: {
-                'authToken': localStorage.getItem("usertoken")
-            }
-        })
-            .then(res => {
-                setMessages(res.data.message)
-                socket.emit("join chat",currentChat._id)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
-
-    useEffect(()=>{
-        fetchMessages();
-        selectedChatCompare = currentChat;
-    },[currentChat])
-
 
     useEffect(() => {
         const data = location.state.chat
@@ -70,8 +47,29 @@ function MessengerDetails() {
                 })
         }
         getUser();
+    }, [location.state.chat, currentUser?._id])
 
-    }, [])
+    const fetchMessages = () => {
+        const id = currentChat?._id
+        axios.get(`api/messages/${id}`, {
+            header: {
+                'authToken': localStorage.getItem("usertoken")
+            }
+        })
+            .then(res => {
+                setMessages(res.data.message)
+                socket.emit("join chat",currentChat?._id)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    useEffect(()=>{
+        fetchMessages();
+        selectedChatCompare = currentChat;
+    },[currentChat])
+
 
     const handleSubmit = (e) =>{
         e.preventDefault();
@@ -135,9 +133,9 @@ function MessengerDetails() {
                     </Box>
                     <Box className='scrollbar-hidden' width='100%' height='69%' sx={{ overflow: 'scroll' }}>
                         {
-                            messages.map(data =>( 
-                                <Box ref={scrollRef}>
-                                    <Messages message={data} own={data.sender === currentUser._id} senderImg={currentUser.profileImg} recieverImg={user.profileImg}  />
+                            messages.map((data, index) =>( 
+                                <Box ref={scrollRef} key={index}>
+                                    <Messages message={data} own={data.sender === currentUser?._id} senderImg={currentUser?.profileImg} recieverImg={user?.profileImg}  />
                                 </Box>
                             ))
                         }

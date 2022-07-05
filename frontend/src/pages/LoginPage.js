@@ -1,19 +1,18 @@
-import { Box, Grid } from '@mui/material'
-import React from 'react'
-import Header from '../components/common/Header'
-import Login from '../components/common/Login'
-import TopDesign from '../components/common/TopDesign'
+import { Box, Grid } from "@mui/material";
+import React from "react";
+import UserLayout from "../Layouts/userLayout";
+import Login from "../components/Login/Login";
 
 function LoginPage() {
-    return (
-        <Grid container>
-            <Header />
-            <TopDesign />
-            <Box width='100%'>
-                <Login />
-            </Box>
-        </Grid>
-    )
+  return (
+    <UserLayout>
+      <Grid container>
+        <Box width="100%">
+          <Login />
+        </Box>
+      </Grid>
+    </UserLayout>
+  );
 }
 
-export default LoginPage
+export default LoginPage;
