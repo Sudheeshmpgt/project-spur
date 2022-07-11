@@ -26,7 +26,7 @@ function JoinNow() {
                         icon: 'success',
                         title: message
                     })
-                }).catch(e => {
+                }).catch(e => { 
                     Toast.fire({
                         icon: 'error',
                         title: "Something went wrong"

@@ -9,43 +9,52 @@ function InterAside() {
   const user = useSelector((state) => state.userData.value);
   const [name, setName] = useState("");
   const [postCount, setPostCount] = useState(0);
-  const [upcomming,  setUpcomming] = useState(0);  
+  const [upcomming, setUpcomming] = useState(0);
 
+  const handleRequestClick = () => {
+    navigate("/requests");
+  };
 
-  const handleRequestClick = () =>{
-    navigate('/requests')
-  }
+  const handleUpcommingClick = () => {
+    navigate("/upcommings");
+  };
 
-  const handleUpcommingClick = () =>{
-    navigate('/upcommings')
-  }
+  const handleManageRequestClick = () => {
+    navigate("/interview/management");
+  };
 
-  useEffect(()=>{
+  const handleReportClick = () => {
+    navigate("/report");
+  };
+
+  useEffect(() => {
     const getPostData = () => {
-      axios.get(`api/post/posts/${user._id}`, {
-        headers: {
-          authToken: localStorage.getItem("usertoken"),
-        },
-      })
-      .then((res)=>{
-        setPostCount(res.data.postsCount)
-      })
+      axios
+        .get(`api/post/posts/${user._id}`, {
+          headers: {
+            authToken: localStorage.getItem("usertoken"),
+          },
+        })
+        .then((res) => {
+          setPostCount(res.data.postsCount);
+        });
     };
 
     const getUpcommingData = () => {
-      axios.get(`api/interview/inter/upcomming/${user._id}`, {
-        headers: {
-          authToken: localStorage.getItem("usertoken"),
-        },
-      })
-      .then((res)=>{
-        setUpcomming(res.data.upcommingCount)
-      })
+      axios
+        .get(`api/interview/inter/upcomming/${user._id}`, {
+          headers: {
+            authToken: localStorage.getItem("usertoken"),
+          },
+        })
+        .then((res) => {
+          setUpcomming(res.data.upcommingCount);
+        });
     };
 
     getPostData();
     getUpcommingData();
-  },[user])
+  }, [user]);
 
   useEffect(() => {
     const token = localStorage.getItem("usertoken");
@@ -130,7 +139,7 @@ function InterAside() {
                   Networks
                 </Typography>
                 <Typography fontSize={{ sm: "1rem" }} mt={2}>
-                  {user? user.connections?.length : 0}
+                  {user ? user.connections?.length : 0}
                 </Typography>
               </Box>
               <Box
@@ -145,7 +154,7 @@ function InterAside() {
                   Posts
                 </Typography>
                 <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1}>
-                  {postCount? postCount : 0}
+                  {postCount ? postCount : 0}
                 </Typography>
               </Box>
             </Box>
@@ -163,10 +172,14 @@ function InterAside() {
                   m: "0 auto",
                 }}
               >
-                <Typography onClick={handleUpcommingClick} fontSize={{ sm: "1rem",  cursor:'pointer' }} mt={2} >
+                <Typography
+                  onClick={handleUpcommingClick}
+                  fontSize={{ sm: "1rem", cursor: "pointer" }}
+                  mt={2}
+                >
                   Upcoming
                 </Typography>
-                <Typography fontSize={{ sm: "1rem" }} mt={2} >
+                <Typography fontSize={{ sm: "1rem" }} mt={2}>
                   {upcomming}
                 </Typography>
               </Box>
@@ -178,7 +191,12 @@ function InterAside() {
                   m: "0 auto",
                 }}
               >
-                <Typography onClick={handleRequestClick} fontSize={{ sm: "1rem", cursor:'pointer' }} mt={1} mb={1}>
+                <Typography
+                  onClick={handleRequestClick}
+                  fontSize={{ sm: "1rem", cursor: "pointer" }}
+                  mt={1}
+                  mb={1}
+                >
                   Requests
                 </Typography>
               </Box>
@@ -205,7 +223,11 @@ function InterAside() {
                   m: "0 auto",
                 }}
               >
-                <Typography fontSize={{ sm: "1rem", cursor: "pointer" }} mt={1}>
+                <Typography
+                  onClick={handleManageRequestClick}
+                  fontSize={{ sm: "1rem", cursor: "pointer" }}
+                  mt={1}
+                >
                   Manage Requests
                 </Typography>
                 {/* <Typography fontSize={{ sm: '1rem' }} mt={1} >3</Typography> */}
@@ -219,6 +241,7 @@ function InterAside() {
                 }}
               >
                 <Typography
+                  onClick={handleReportClick}
                   fontSize={{ sm: "1rem", cursor: "pointer" }}
                   mt={1}
                   mb={1.5}

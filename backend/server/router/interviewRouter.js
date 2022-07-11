@@ -9,11 +9,12 @@ const {
   userCancellation,
   getRequestData,
   getUpcommingData,
-  getInterUpcommingData
+  getInterUpcommingData,
+  setInterviewStatus
 } = require("../controller/interviewController"); 
 
 route.post("/", interviewRequest);
-route.get("/:id", getRequest);
+route.get("/:id", getRequest); 
 route.put("/schedule", interviewSchedule);
 route.post("/cancel", cancelInterview);
 route.get("/user/:id", getNotification);
@@ -22,5 +23,6 @@ route.put("/user/cancel", userCancellation);
 route.get("/user/request/:id", getRequestData);
 route.get("/user/upcomming/:id", getUpcommingData)
 route.get("/interviewer/upcomming/:id", getInterUpcommingData)
+route.put("/interviewer/status/:id", setInterviewStatus)
 
 module.exports = route;

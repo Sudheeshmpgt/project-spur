@@ -22,7 +22,8 @@ cloudinary.config({
   const upload = multer({ storage: storage });
 
  
-route.post('/login', login)
+route.post('/login', login) 
+route.post('/registration', registration)
 route.post('/otplogin', otpLogin)
 route.post('/otpsubmit', otpVerify) 
 route.put('/update/:id',upload.single("profileImg"), updateUserData)

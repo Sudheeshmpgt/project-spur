@@ -12,6 +12,9 @@ import UserNotification from './pages/userNotification';
 import PaymentPage from './pages/PaymentPage';
 import UserUpcommingPage from './pages/UserUpcommingPage';
 import InterviewerUpcommingPage from './pages/InterviewerUpcommingPage';
+import InterviewManagementPage from './pages/InterviewManagementPage';
+import InterviewerReportPage from './pages/InterviewerReportPage';
+
 
 function App() {
   return (
@@ -27,6 +30,8 @@ function App() {
         <Route path='/payment' element={<PaymentPage/>} />
         <Route path='/upcomming' element={<UserUpcommingPage/>} />
         <Route path='/upcommings' element={<InterviewerUpcommingPage/>} />
+        <Route path='/interview/management' element={<InterviewManagementPage/>} />
+        <Route path='/report' element={<InterviewerReportPage/>} />
       </Routes>
   );
 }

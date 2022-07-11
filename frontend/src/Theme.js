@@ -17,7 +17,7 @@ export const Theme = createTheme({
     ],
     fontSize:'1rem',
     body2:{
-      fontFamily:['Poppins, sans-serif','Oswald, sans-serif'],
+      fontFamily:['Oswald, sans-serif', 'Poppins, sans-serif'],
       fontSize:'1rem'
     }
   },

@@ -59,6 +59,7 @@ const interviewSchedule = async (req, res) => {
       request.time = time;
       request.link = link;
       request.confirmed = true;
+      request.status = "Confirmed"
 
       const scheduled = await request.save();
     }
@@ -79,12 +80,12 @@ const cancelInterview = async (req, res) => {
       request.time = new Date();
       request.link = "Nill";
       request.cancelled = true;
+      request.status = "Cancelled";
 
       const newScheduled = await request.save();
     }
     res.status(200).send({ message: "Interview Cancelled" });
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -122,7 +123,7 @@ const userConfirmation = async (req, res) => {
     const { requestId } = req.body;
     const confirm = await InterviewModel.findByIdAndUpdate(
       { _id: requestId },
-      { userConfirmation: true, paid: true }
+      { userConfirmation: true, paid: true, status:"Confirmed" }
     );
     if (confirm) {
       res.status(200).send({ message: "Confirmed" });
@@ -139,7 +140,7 @@ const userCancellation = async (req, res) => {
     const { requestId } = req.body;
     const confirm = await InterviewModel.findByIdAndUpdate(
       { _id: requestId },
-      { userCancellation: true }
+      { userCancellation: true, status:"Cancelled" }
     );
     if (confirm) {
       res.status(200).send({ message: "Cancelled" });
@@ -178,7 +179,7 @@ const getRequestData = async (req, res) => {
 
 const getUpcommingData = async (req, res) => {
   try {
-    const nowTime = new Date()
+    const nowTime = new Date();
     const requests = await InterviewModel.find({ userId: req.params.id });
     if (requests.length !== 0) {
       const requestData = await InterviewModel.populate(requests, {
@@ -194,7 +195,11 @@ const getUpcommingData = async (req, res) => {
         ],
       });
       const upcomming = requestData.filter((data) => {
-        return data.userConfirmation === true && data.paid === true && (data.date.getTime() >= nowTime.getTime())
+        return (
+          data.userConfirmation === true &&
+          data.paid === true &&
+          data.date.getTime() >= nowTime.getTime()
+        );
       });
       const upcommingCount = upcomming.length;
 
@@ -230,8 +235,10 @@ const getUpcommingData = async (req, res) => {
 
 const getInterUpcommingData = async (req, res) => {
   try {
-    const nowTime = new Date()
-    const requests = await InterviewModel.find({ interviewerId: req.params.id });
+    const nowTime = new Date();
+    const requests = await InterviewModel.find({
+      interviewerId: req.params.id,
+    });
     if (requests.length !== 0) {
       const requestData = await InterviewModel.populate(requests, {
         path: "userId",
@@ -245,13 +252,16 @@ const getInterUpcommingData = async (req, res) => {
           "phone",
         ],
       });
-      
+
       const upcomming = requestData.filter((data) => {
-        return data.userConfirmation === true && data.paid === true && (data.date.getTime() >= nowTime.getTime())  
+        return (
+          data.userConfirmation === true &&
+          data.paid === true &&
+          data.date.getTime() >= nowTime.getTime()
+        );
       });
       const upcommingCount = upcomming.length;
 
-     
       const pending = requestData.filter((data) => {
         return data.confirmed === false && data.cancelled === false;
       });
@@ -282,6 +292,38 @@ const getInterUpcommingData = async (req, res) => {
   }
 };
 
+const setInterviewStatus = async (req, res) => {
+  try {
+    const { status, interviewerId } = req.body;
+    const request = await InterviewModel.findByIdAndUpdate({_id:req.params.id},{status: status})
+    if(request){ 
+      const requests = await InterviewModel.find({
+        interviewerId: interviewerId,
+      });
+      const requestData = await InterviewModel.populate(requests, {
+      path: "userId",
+      select: [
+        "name",
+        "about",
+        "profileImg",
+        "_id",
+        "interviewer",
+        "email",
+        "phone",
+      ],
+    });
+    requestData.sort((dateA, dateB) => {
+      return dateB.createdAt - dateA.createdAt;
+    });
+    res.send({ message: "OK", requests: requestData });
+  } else {
+    res.send({ message: "No requests found" });
+  }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
 module.exports = {
   interviewRequest,
   getRequest,
@@ -293,4 +335,5 @@ module.exports = {
   getRequestData,
   getUpcommingData,
   getInterUpcommingData,
+  setInterviewStatus,
 };
