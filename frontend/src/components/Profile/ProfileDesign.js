@@ -21,7 +21,7 @@ import Statistics from "../../components/User/Statistics";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useDispatch } from "react-redux";
-import { login } from "../../Features/userData";
+import { login } from "../../Redux/Features/userData";
 import CloseIcon from "@mui/icons-material/Close";
 import PasswordChange from "./PasswordChange";
 import InterStatistics from "../Interviewer/InterStatistics"

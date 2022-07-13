@@ -9,7 +9,7 @@ import axios from '../../axiosinstance';
 import Toast from '../Sweetalert/sweetAlert';
 import { useSelector } from 'react-redux'
 import {useDispatch} from 'react-redux'
-import { createPost } from '../../Features/postData';
+import { createPost } from '../../Redux/Features/postData';
 
 function CreatePost() {
     const navigate = useNavigate()

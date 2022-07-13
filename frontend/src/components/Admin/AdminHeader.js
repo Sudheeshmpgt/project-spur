@@ -3,37 +3,28 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
-import { login } from '../../Redux/Features/userData'
-import { createPost } from '../../Redux/Features/postData'
+import { adminLogin } from '../../Redux/Features/adminData'
 
-function Header() {
-    const user = useSelector(state => state.userData.value)
-    // const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+function AdminHeader() {
+    const admin = useSelector(state => state.adminData.value)
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [token, setToken] = useState('')
-    const [image, setImage] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     useEffect(() => {
-    const token = localStorage.getItem("usertoken")
-    const image = localStorage.getItem("userImg")
+    const token = localStorage.getItem("admintoken")
     setToken(token)
-    setImage(image)
     },[])
 
     const logout = () => {
         handleCloseUserMenu();
-        dispatch(login(''))
-        dispatch(createPost([]))
-        localStorage.removeItem("usertoken")
+        dispatch(adminLogin(''))
+        localStorage.removeItem("admintoken")
         navigate('/')
     }
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -84,42 +75,6 @@ function Header() {
                         >
                             Spur
                         </Typography>
-                        {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleOpenNavMenu}
-                                color="inherit"
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorElNav}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                open={Boolean(anchorElNav)}
-                                onClose={handleCloseNavMenu}
-                                sx={{
-                                    display: { xs: 'block', md: 'none' },
-                                }}
-                            >
-                                {pages.map((page) => (
-                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">{page}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                        </Box> */}
                         <Typography
                             variant="p"
                             noWrap
@@ -171,21 +126,17 @@ function Header() {
                                 <Box sx={{ flexGrow: 0 }}>
                                     <Tooltip title="Open settings">
                                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                            <Paper sx={{borderRadius:7, width:50, height:50, zIndex:1}}> 
-                                            <Avatar alt="Remy Sharp" src={ user.profileImg} sx={{ width: 50, height: 50}} />
-                                            </Paper>
-                                            <Paper sx={{ width: 50, borderRadius: 3}}>
-                                            <Box sx={{
-                                                ml: -2,
+                                            <Avatar component={Paper} alt="A" src='' sx={{ width: 50, height: 50}} />
+                                            <Box component={Paper} sx={{
+                                                ml:-1.6,
                                                 mr: 2,
-                                                width: 55,
+                                                width: 70,
                                                 height: 'auto',
                                                 p: 0.7,
                                                 backgroundColor: '#cce8ff',
                                                 borderRadius: 3,
-                                            }}><Typography fontWeight={700} fontSize={{sm:'0.9rem'}} cololr='text.primary'>Me</Typography>
+                                            }}><Typography fontWeight={700} fontSize={{sm:'0.9rem'}} cololr='text.primary'>Admin</Typography>
                                             </Box>
-                                            </Paper>
                                         </IconButton>
                                     </Tooltip>
                                     <Menu
@@ -224,4 +175,4 @@ function Header() {
     )
 }
 
-export default Header
+export default AdminHeader

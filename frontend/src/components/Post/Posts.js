@@ -22,8 +22,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Toast from "../Sweetalert/sweetAlert";
 import { useDispatch } from "react-redux";
-import { login } from "../../Features/userData";
-import { createPost } from "../../Features/postData";
+import { login } from "../../Redux/Features/userData";
+import { createPost } from "../../Redux/Features/postData";
 import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
 
 function Posts() {

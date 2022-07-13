@@ -17,9 +17,12 @@ app.use('/api/conversations', require('./server/router/conversationRouter'))
 app.use('/api/messages', require('./server/router/messageRouter'))
 app.use('/api/interview', require('./server/router/interviewRouter'))
 app.use('/api/payment', require('./server/router/razorpayRouter'))
+app.use('/api/admin', require('./server/router/adminRouter'))
+app.use('/api/admin/manage/user', require('./server/router/userManagementRouter'))
+app.use('/api/admin/manage/interviewer', require('./server/router/interviewerManagementRouter'))
 
 
-const server = app.listen(PORT, () => {
+const server = app.listen(PORT, () => { 
     console.log("Server started at http://localhost:9000");
 })
 
@@ -44,7 +47,7 @@ const removeUser = (user) => {
 io.on("connection", (socket)=>{
     console.log("connected to socket.io")  
 
-    socket.on("setup", (userData)=>{ 
+    socket.on("setup", (userData)=>{  
         socket.join(userData._id)
         socket.emit("connected")
         addUser(userData);

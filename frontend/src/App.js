@@ -14,6 +14,10 @@ import UserUpcommingPage from './pages/UserUpcommingPage';
 import InterviewerUpcommingPage from './pages/InterviewerUpcommingPage';
 import InterviewManagementPage from './pages/InterviewManagementPage';
 import InterviewerReportPage from './pages/InterviewerReportPage';
+import AdminLoginPage from './pages/Admin/AdminLoginPage';
+import AdminRegisterPage from './pages/Admin/AdminRegisterPage';
+import AdminDashboardPage from './pages/Admin/AdminDashboardPage';
+import ManageUserPage from './pages/Admin/ManageUserPage';
 
 
 function App() {
@@ -32,6 +36,10 @@ function App() {
         <Route path='/upcommings' element={<InterviewerUpcommingPage/>} />
         <Route path='/interview/management' element={<InterviewManagementPage/>} />
         <Route path='/report' element={<InterviewerReportPage/>} />
+        <Route path='/admin/login' element={<AdminLoginPage/>} />
+        <Route path='/admin/register' element={<AdminRegisterPage/>} />
+        <Route path='/admin/dashboard' element={<AdminDashboardPage/>} />
+        <Route path='/admin/user' element={<ManageUserPage/>} />
       </Routes>
   );
 }

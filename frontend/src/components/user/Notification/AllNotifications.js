@@ -8,7 +8,7 @@ import Notification from "./Notification";
 import '../../common/Scroll.css'
 import { useNavigate } from "react-router-dom";
 import {useDispatch} from "react-redux"
-import {notification} from "../../../Features/notificationData"
+import {notification} from "../../../Redux/Features/notificationData"
 
 function AllNotifications() {
     const user = useSelector((state) => state.userData.value);

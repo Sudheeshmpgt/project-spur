@@ -169,7 +169,7 @@ const updateUserData = async (req, res) => {
       res.send({ message: "Request failed" });
     }
   } catch (error) {
-    res.send({ message: "Bad request", err: error });
+    res.status(500).send({ message: "Bad request", err: error });
   }
 };
 

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Fab,
   Grid,
   IconButton,
-  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -12,81 +10,87 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
   Pagination,
+  Button,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../axiosinstance";
 import CloseIcon from "@mui/icons-material/Close";
 import Toast from "../../Sweetalert/sweetAlert";
 import { useSelector } from "react-redux";
-import RateReviewIcon from "@mui/icons-material/RateReview";
-import dayjs from "dayjs";
 import "../../common/Scroll.css";
 
-function ManageInterview() {
+function MangeUser() {
   const user = useSelector((state) => state.userData.value);
-  const [request, setRequest] = useState([]);
-  const [status, setStatus] = useState("");
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
-  const [view, setView] = useState([])
-	const [page, setPage] = useState(1)
-	const pageItems = 5
-	const pageCount = Math.ceil(request.length / pageItems)
+  const [view, setView] = useState([]);
+  const [page, setPage] = useState(1);
+  const pageItems = 4;
+  const pageCount = Math.ceil(users.length / pageItems);
 
   useEffect(() => {
-		setView(
-			request.slice(
-				(page - 1) * pageItems,
-				(page - 1) * pageItems + pageItems
-			)
-		)
-	}, [request])
+    const token = localStorage.getItem("admintoken");
+    if (!token) {
+      navigate("/admin/login");
+    }
+  }, [navigate]);
 
-	useEffect(() => {
-		setView(
-			request.slice(
-				(page - 1) * pageItems,
-				(page - 1) * pageItems + pageItems
-			)
-		)
-	}, [page])
+  useEffect(() => {
+    setView(
+      users.slice((page - 1) * pageItems, (page - 1) * pageItems + pageItems)
+    );
+  }, [users, page]);
 
-	const handlePageChange = (event, value) => {
-		setPage(value)
-	}
+  useEffect(() => {
+    setView(
+      users.slice((page - 1) * pageItems, (page - 1) * pageItems + pageItems)
+    );
+  }, [page, users]);
 
-  const handleCloseClick = () => {
-    navigate("/home");
+  const handlePageChange = (event, value) => {
+    setPage(value);
   };
 
-  const handleStatusChange = (e, id) => {
-    setStatus(e.target.value);
-        const values = {
-          status: e.target.value, 
-          interviewerId: user._id
-        }
-        axios.put(`api/interview/interviewer/status/${id}`, values, {
-          headers: {
-            authToken: localStorage.getItem("usertoken"),
-          },
-        })
-        .then((res)=>{
-          setRequest(res.data.requests);
-        })
+  const handleCloseClick = () => {
+    navigate("/admin/dashboard");
+  };
+
+  const handleBlockClick = (id) => {
+    axios
+      .put(`/api/admin/manage/user/status/${id}`, {
+        headers: {
+          authToken: localStorage.getItem("admintoken"),
+        },
+      })
+      .then((res) => {
+        setUsers(res.data.users); 
+        Toast.fire({
+          icon: "success",
+          title: "User status changed successfully",
+        });
+      })
+      .catch((err) => {
+        Toast.fire({
+          icon: "error",
+          title: "Something went wrong",
+        });
+      });
   };
 
   useEffect(() => {
     axios
-      .get(`api/interview/${user._id}`, {
+      .get(`/api/admin/manage/user`, {
         headers: {
-          authToken: localStorage.getItem("usertoken"),
+          authToken: localStorage.getItem("admintoken"),
         },
       })
       .then((res) => {
-        setRequest(res.data.requests);
+        setUsers(res.data.users);
       })
       .catch((err) => {
         Toast.fire({
@@ -95,14 +99,6 @@ function ManageInterview() {
         });
       });
   }, [user]);
-
-  const addReview = () => {
-    return (
-      <Fab variant="contained" size="small" color="primary">
-        <RateReviewIcon sx={{ fontSize: 23 }} />
-      </Fab>
-    );
-  };
 
   return (
     <Grid container>
@@ -128,7 +124,7 @@ function ManageInterview() {
             fontSize={{ xs: "1rem", sm: "1.3rem" }}
             sx={{ mt: 2, mb: 1 }}
           >
-            Manage Interviews
+            Manage Users
           </Typography>
           <IconButton onClick={handleCloseClick}>
             <CloseIcon sx={{ fontSize: "1.5rem" }} />
@@ -147,20 +143,20 @@ function ManageInterview() {
           <Table sx={{ width: 1011 }} aria-label="simple table">
             <TableHead sx={{ backgroundColor: "#0037ff6e" }}>
               <TableRow>
-                <TableCell align="center">Id</TableCell>
+                <TableCell align="center">No.</TableCell>
                 <TableCell align="center">Name</TableCell>
                 <TableCell align="center">Phone No.</TableCell>
                 <TableCell align="center">About</TableCell>
-                <TableCell align="center">Date</TableCell>
-                <TableCell align="center">Time</TableCell>
-                <TableCell align="center">Status</TableCell>
-                <TableCell align="center">Report</TableCell>
+                <TableCell align="center">Block</TableCell>
+                <TableCell align="center" colSpan={2}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {view.map((data, index) => (
                 <TableRow
-                  key={data._id}
+                  key={data?._id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row" sx={{ width: 40 }}>
@@ -170,60 +166,62 @@ function ManageInterview() {
                     align="center"
                     sx={{ fontSize: "0.9rem", width: 130 }}
                   >
-                    {data.userId.name}
+                    {data?.name}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ fontSize: "0.9rem", width: 95 }}
                   >
-                    {data.userId.phone}
+                    {data?.phone}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ fontSize: "0.9rem", width: 130 }}
                   >
-                    {data.userId.about}
+                    {data?.about}
                   </TableCell>
                   <TableCell
                     align="center"
-                    sx={{ fontSize: "0.9rem", width: 100 }}
+                    sx={{ fontSize: "0.9rem", width: 70 }}
                   >
-                    {dayjs(data.date).format("MMM DD YYYY")}
+                    {
+                      data.block ? 
+                      (
+                        <Button
+                      onClick={()=>handleBlockClick(data._id)}
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                    >
+                      UnBlock
+                    </Button>
+                      ):(
+                        <Button
+                      onClick={()=>handleBlockClick(data._id)}
+                      variant="contained"
+                      color="secondary"
+                      size="small"
+                    >
+                      Block
+                    </Button>
+                      )
+                    }
+                    
                   </TableCell>
                   <TableCell
                     align="center"
-                    sx={{ fontSize: "0.9rem", width: 100 }}
+                    sx={{ fontSize: "0.9rem", width: 50 }}
                   >
-                    {dayjs(data.time).format("hh:mm a")}
-                  </TableCell>
-                  <TableCell>
-                    <Box sx={{ minWidth: 100 }}>
-                      {
-                        data?.status === "Cancelled" ? (
-                          <Typography fontSize='1.1rem' color='error'>
-                            {data?.status}
-                          </Typography>
-                        ):(
-                      <TextField
-                        name="status"
-                        label="Status"
-                        select
-                        value={data.status ? data.status : status}
-                        onChange={(e) => {
-                          handleStatusChange(e, data._id);
-                        }}
-                        fullWidth
-                      >
-                        <MenuItem value="Booked">Confirmed</MenuItem>
-                        <MenuItem value="Completed">Completed</MenuItem>
-                      </TextField>
-                        )
-                      }
-                    </Box>
-                  </TableCell>
-                  <TableCell align="center">
                     <IconButton>
-                      <RateReviewIcon sx={{ fontSize: 25, color: "green" }} />
+                      <DeleteIcon sx={{ fontSize: 25, color: "red" }} />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontSize: "0.9rem", width: 50 }}
+                  >
+                    <IconButton>
+                      <EditIcon sx={{ fontSize: 25, color: "green" }} />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -231,14 +229,14 @@ function ManageInterview() {
             </TableBody>
           </Table>
           <Pagination
-						count={pageCount}
-						onChange={handlePageChange}
-						color="primary"
-					/>
+            count={pageCount}
+            onChange={handlePageChange}
+            color="primary"
+          />
         </TableContainer>
       </Box>
     </Grid>
   );
 }
 
-export default ManageInterview;
+export default MangeUser;
