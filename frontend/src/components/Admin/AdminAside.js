@@ -20,6 +20,10 @@ function AdminAside() {
     navigate("/admin/user");
   };
 
+  const handleInterviewersClick = () => {
+    navigate("/admin/interviewer")
+  };
+
   return (
     <Grid container>
       <Box width="100%">
@@ -98,7 +102,7 @@ function AdminAside() {
                 <Box width="30%">
                   <AssignmentIndIcon sx={{ fontSize: 25, mt: 2.25, mb: 1 }} />
                 </Box>
-                <Box width="70%">
+                <Box onClick={handleInterviewersClick} sx={{cursor:'pointer'}} width="70%">
                   <Typography fontSize={{ sm: "1.25rem" }} mt={2}>
                     Interviewers
                   </Typography>

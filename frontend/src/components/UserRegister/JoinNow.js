@@ -2,7 +2,6 @@ import { Box, Button, FormControl, FormControlLabel, Grid, Link, Paper, Radio, R
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import Swal from 'sweetalert2'
 import axios from '../../axiosinstance'
 import Toast from '../Sweetalert/sweetAlert'
 

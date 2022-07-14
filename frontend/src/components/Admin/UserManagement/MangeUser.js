@@ -21,6 +21,7 @@ import axios from "../../../axiosinstance";
 import CloseIcon from "@mui/icons-material/Close";
 import Toast from "../../Sweetalert/sweetAlert";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 import "../../common/Scroll.css";
 
 function MangeUser() {
@@ -68,7 +69,7 @@ function MangeUser() {
         },
       })
       .then((res) => {
-        setUsers(res.data.users); 
+        setUsers(res.data.users);
         Toast.fire({
           icon: "success",
           title: "User status changed successfully",
@@ -81,6 +82,35 @@ function MangeUser() {
         });
       });
   };
+
+  const handleDeleteClick = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`/api/admin/manage/user/delete/${id}`, {
+            headers: {
+              authToken: localStorage.getItem("admintoken"),
+            },
+          })
+          .then((res) => {
+            setUsers(res.data.users);
+          });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
+
+  const handleEditClick = (id) => {
+    navigate('/admin/user/update', {state: {id : id}})
+  }
 
   useEffect(() => {
     axios
@@ -184,35 +214,31 @@ function MangeUser() {
                     align="center"
                     sx={{ fontSize: "0.9rem", width: 70 }}
                   >
-                    {
-                      data.block ? 
-                      (
-                        <Button
-                      onClick={()=>handleBlockClick(data._id)}
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                    >
-                      UnBlock
-                    </Button>
-                      ):(
-                        <Button
-                      onClick={()=>handleBlockClick(data._id)}
-                      variant="contained"
-                      color="secondary"
-                      size="small"
-                    >
-                      Block
-                    </Button>
-                      )
-                    }
-                    
+                    {data.block ? (
+                      <Button
+                        onClick={() => handleBlockClick(data._id)}
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                      >
+                        UnBlock
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => handleBlockClick(data._id)}
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                      >
+                        Block
+                      </Button>
+                    )}
                   </TableCell>
                   <TableCell
                     align="center"
                     sx={{ fontSize: "0.9rem", width: 50 }}
                   >
-                    <IconButton>
+                    <IconButton onClick={() => handleDeleteClick(data._id)}>
                       <DeleteIcon sx={{ fontSize: 25, color: "red" }} />
                     </IconButton>
                   </TableCell>
@@ -220,7 +246,7 @@ function MangeUser() {
                     align="center"
                     sx={{ fontSize: "0.9rem", width: 50 }}
                   >
-                    <IconButton>
+                    <IconButton onClick={() => handleEditClick(data._id)}>
                       <EditIcon sx={{ fontSize: 25, color: "green" }} />
                     </IconButton>
                   </TableCell>

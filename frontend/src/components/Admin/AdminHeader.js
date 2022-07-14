@@ -95,7 +95,7 @@ function AdminHeader() {
                             Spur
                         </Typography>
                         {
-                            !token ? ( 
+                            !admin._id ? ( 
                                 <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'flex' } }}>
                                     <Button
                                         variant="contained"

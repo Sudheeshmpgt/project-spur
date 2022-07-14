@@ -19,14 +19,12 @@ const updateBlockStatus = async(req, res) => {
         if(interviewer){
             const status = interviewer.block;
             const updatedUser = await UserModel.updateOne({_id: interviewer._id},{block : !status})
-            console.log(updatedUser)
             const interviewers = await UserModel.find({interviewer:true})
             res.status(200).send({message:'Ok', interviewers: interviewers})
         }else{
             res.status(404).send({message:'User not found!'})  
         }
     }catch(error){
-        console.log(error)
         res.status(500).send(error)
     }
 }
