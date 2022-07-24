@@ -17,7 +17,7 @@ const createPost = async (req, res) => {
       select: ["name", "about", "profileImg", "_id", "interviewer"],
     });
     if (posts.length === 0) {
-      res.send({ message: "No posts found" });
+      res.send({ message: "No posts found" }); 
     } else {
       postsData.sort((dateA, dateB) => {
         return dateB.createdAt - dateA.createdAt;
@@ -27,7 +27,6 @@ const createPost = async (req, res) => {
         .send({ message: "Post created successfully", posts: postsData });
     }
   } catch (error) {
-    console.log(error);
     res.status(500).send(error);
   }
 };
@@ -116,9 +115,16 @@ const personalPost = async (req, res) => {
     const posts = await PostModel.find({createdBy:req.params.id});
     if (posts?.length !== 0) {
         const postCount = posts?.length
-      res.send({ message: "OK", postsCount: postCount });
+        const postData = await PostModel.populate(posts, {
+          path: "createdBy comments.commentedBy",
+          select: ["name", "about", "profileImg", "_id", "interviewer"],
+        });
+        postData.sort((dateA, dateB) => {
+          return dateB.createdAt - dateA.createdAt;
+        });
+      res.send({ message: "OK", postsCount: postCount, posts:postData }); 
     } else {
-      res.send({ message: "No posts found" });
+      res.status(404).send({ message: "No posts found" });
     }
   } catch (error) {
     res.status(500).send(error);

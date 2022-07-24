@@ -10,6 +10,7 @@ function InterAside() {
   const [name, setName] = useState("");
   const [postCount, setPostCount] = useState(0);
   const [upcomming, setUpcomming] = useState(0);
+  
 
   const handleRequestClick = () => {
     navigate("/requests");
@@ -27,6 +28,14 @@ function InterAside() {
     navigate("/report");
   };
 
+  const handlePostClick = () => {
+    navigate('/posts')
+  }
+
+  const handleDashboardClick = () => {
+    navigate('/dashboard')
+  }
+ 
   useEffect(() => {
     const getPostData = () => {
       axios
@@ -42,7 +51,7 @@ function InterAside() {
 
     const getUpcommingData = () => {
       axios
-        .get(`api/interview/inter/upcomming/${user._id}`, {
+        .get(`api/interview/interviewer/upcomming/${user._id}`, {
           headers: {
             authToken: localStorage.getItem("usertoken"),
           },
@@ -150,8 +159,8 @@ function InterAside() {
                   m: "0 auto",
                 }}
               >
-                <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1}>
-                  Posts
+                <Typography onClick={handlePostClick} fontSize={{ sm: "1rem" }} mt={1} mb={1} sx={{cursor:'pointer'}}>
+                  My Posts
                 </Typography>
                 <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1}>
                   {postCount ? postCount : 0}
@@ -210,7 +219,7 @@ function InterAside() {
                   m: "0 auto",
                 }}
               >
-                <Typography fontSize={{ sm: "1rem", cursor: "pointer" }} mt={2}>
+                <Typography   onClick={handleDashboardClick} fontSize={{ sm: "1rem", cursor: "pointer" }} mt={2}>
                   Dashboard
                 </Typography>
                 {/* <Typography fontSize={{ sm: '1rem' }} mt={2} >5</Typography> */}

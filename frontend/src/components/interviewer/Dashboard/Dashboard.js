@@ -5,27 +5,28 @@ import axios from "../../../axiosinstance";
 import { useSelector } from "react-redux";
 import '../../common/Scroll.css';
 import { useNavigate } from "react-router-dom";
-import InterUpcommings from "./InterUpcommings"; 
+import DashboardDesign from "./DashboardDesign";
 
-function InterAllUpcomming() {
+function Dashboard() {
     const user = useSelector((state) => state.userData.value);
     const navigate = useNavigate()
-    const [upcomming, setupComming] = useState([]) 
+    const [balance, setBalance] = useState([]) 
   
     useEffect(() => {
-        const getupCommingData = () => {
-            axios.get(`api/interview/interviewer/upcomming/${user._id}`, {
+        const getBalanceData = () => {
+            axios.get(`/api/interviewer/wallet/${user._id}`, {
               headers: {
                 authToken: localStorage.getItem("usertoken"),
               },
             })
             .then((res)=>{
-              setupComming(res.data.upcomming)
+              console.log(res.data)
+              setBalance(res.data.balance)
             })
           };
-          getupCommingData();
+          getBalanceData();
     }, [user]);
-
+  
     const handleClick = () => {
         navigate('/home')
     }
@@ -54,23 +55,19 @@ function InterAllUpcomming() {
               fontSize={{ xs: "1rem", sm: "1.3rem" }}
               sx={{ mt: 2, mb: 1 }}
             >
-              Upcomming Interviews
+              My Dashboard
             </Typography>
             <IconButton onClick={handleClick}>
               <CloseIcon sx={{ fontSize: "1.5rem" }} />
             </IconButton>
           </Box>
           <Box className="scrollbar-hidden" sx={{overflow:'scroll', height:480, width:'100%'}}>
-          {
-            upcomming?.map((data)=>(
-              <InterUpcommings requestData={data}/>
-            ))
-          }
+            <DashboardDesign/>
           </Box>
         </Box>
       </Grid>
     );
   }
+  
 
-
-export default InterAllUpcomming
+export default Dashboard

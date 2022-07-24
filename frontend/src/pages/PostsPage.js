@@ -2,16 +2,16 @@ import { Box, Grid } from "@mui/material";
 import React, { useEffect } from "react";
 import Aside from "../components/User/Aside";
 import ChatAside from "../components/Messenger/ChatAside";
-import CreatePost from "../components/Post/CreatePost";
 import Posts from "../components/Post/Posts";
 import "../components/common/Scroll.css";
 import { useSelector } from "react-redux";
 import InterAside from "../components/Interviewer/InterAside";
 import { useNavigate } from "react-router-dom";
 import Layouts from "../Layouts/userLayout";
+import MyPosts from "../components/Post/MyPosts";
 
-function UserHome() {
-  const user = useSelector((state) => state.userData.value);
+function PostsPage() {
+    const user = useSelector((state) => state.userData.value);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,10 +20,11 @@ function UserHome() {
       navigate("/");
     }
   }, [navigate]);
+
   return (
     <Layouts>
       <Grid>
-        {user?.interviewer ? (
+        {user.interviewer ? (
           <Box
             sx={{
               width: "100%",
@@ -39,17 +40,14 @@ function UserHome() {
               sx={{
                 width: "50%",
                 height: "auto",
-                display: "flex",
-                flexDirection: "column",
               }}
             >
-              <CreatePost />
               <Box
                 className="scrollbar-hidden"
                 width="100%"
                 sx={{ mt: -8.0, overflow: "scroll" }}
               >
-                <Posts />
+                <MyPosts />
               </Box>
             </Box>
             <Box sx={{ width: "25%" }}>
@@ -72,17 +70,14 @@ function UserHome() {
               sx={{
                 width: "50%",
                 height: "auto",
-                display: "flex",
-                flexDirection: "column",
               }}
             >
-              <CreatePost />
               <Box
                 className="scrollbar-hidden"
                 width="100%"
                 sx={{ mt: -8.0, overflow: "scroll" }}
               >
-                <Posts />
+                <MyPosts />
               </Box>
             </Box>
             <Box sx={{ width: "25%" }}>
@@ -95,4 +90,4 @@ function UserHome() {
   );
 }
 
-export default UserHome;
+export default PostsPage

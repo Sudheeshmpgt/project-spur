@@ -16,6 +16,9 @@ function AdminHeader() {
     useEffect(() => {
     const token = localStorage.getItem("admintoken")
     setToken(token)
+    if(!token){
+        navigate("/admin/login") 
+    }
     },[])
 
     const logout = () => {

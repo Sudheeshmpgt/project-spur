@@ -5,25 +5,26 @@ import axios from "../../../axiosinstance";
 import { useSelector } from "react-redux";
 import '../../common/Scroll.css';
 import { useNavigate } from "react-router-dom";
-import InterUpcommings from "./InterUpcommings"; 
+import CompletedInterviews from "./CompletedInterviews";
 
-function InterAllUpcomming() {
+function AllCompletedInterviews() {
     const user = useSelector((state) => state.userData.value);
+  
     const navigate = useNavigate()
-    const [upcomming, setupComming] = useState([]) 
+    const [completedInterviews, setCompletedInterviews] = useState([]) 
   
     useEffect(() => {
-        const getupCommingData = () => {
-            axios.get(`api/interview/interviewer/upcomming/${user._id}`, {
+        const getcompletedInterviewsData = () => {
+            axios.get(`/api/interview//user/completed/${user._id}`, {
               headers: {
                 authToken: localStorage.getItem("usertoken"),
               },
             })
             .then((res)=>{
-              setupComming(res.data.upcomming)
+              setCompletedInterviews(res.data.interviews)
             })
           };
-          getupCommingData();
+          getcompletedInterviewsData();
     }, [user]);
 
     const handleClick = () => {
@@ -54,7 +55,7 @@ function InterAllUpcomming() {
               fontSize={{ xs: "1rem", sm: "1.3rem" }}
               sx={{ mt: 2, mb: 1 }}
             >
-              Upcomming Interviews
+              Completed Interviews
             </Typography>
             <IconButton onClick={handleClick}>
               <CloseIcon sx={{ fontSize: "1.5rem" }} />
@@ -62,8 +63,8 @@ function InterAllUpcomming() {
           </Box>
           <Box className="scrollbar-hidden" sx={{overflow:'scroll', height:480, width:'100%'}}>
           {
-            upcomming?.map((data)=>(
-              <InterUpcommings requestData={data}/>
+            completedInterviews?.map((data)=>(
+              <CompletedInterviews requestData={data}/>
             ))
           }
           </Box>
@@ -73,4 +74,4 @@ function InterAllUpcomming() {
   }
 
 
-export default InterAllUpcomming
+export default AllCompletedInterviews

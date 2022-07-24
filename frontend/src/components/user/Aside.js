@@ -1,19 +1,16 @@
-import {
-  Avatar,
-  Box,
-  Grid,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "../../axiosinstance"
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import UpcomingIcon from "@mui/icons-material/Upcoming";
+import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+import axios from "../../axiosinstance";
+import SensorOccupiedIcon from "@mui/icons-material/SensorOccupied";
 
 function Aside() {
   const navigate = useNavigate();
   const user = useSelector((state) => state.userData.value);
-  const [name, setName] = useState("");
 
   const [postCount, setPostCount] = useState(0);
   const [pending, setPending] = useState(0);
@@ -23,49 +20,54 @@ function Aside() {
     const token = localStorage.getItem("usertoken");
     if (!token) {
       navigate("/");
-    } else {
-      const name = localStorage.getItem("userName");
-      setName(name);
     }
   }, [navigate]);
 
   useEffect(() => {
-      const getPostData = () => {
-          axios.get(`api/post/posts/${user._id}`, {
-            headers: {
-              authToken: localStorage.getItem("usertoken"),
-            },
-          })
-          .then((res)=>{
-            setPostCount(res.data.postsCount)
-          })
-        };
+    const getPostData = () => {
+      axios
+        .get(`api/post/posts/${user._id}`, {
+          headers: {
+            authToken: localStorage.getItem("usertoken"),
+          },
+        })
+        .then((res) => {
+          setPostCount(res.data.postsCount);
+        });
+    };
 
-        const getUpcommingData = () => {
-          axios.get(`api/interview//user/upcomming/${user._id}`, {
-            headers: {
-              authToken: localStorage.getItem("usertoken"),
-            },
-          })
-          .then((res)=>{
-            setPending(res.data.pendingCount)
-            setCompleted(res.data.completedCount)
-          })
-        };
+    const getUpcommingData = () => {
+      axios
+        .get(`api/interview//user/upcomming/${user._id}`, {
+          headers: {
+            authToken: localStorage.getItem("usertoken"),
+          },
+        })
+        .then((res) => {
+          setPending(res.data.pendingCount);
+          setCompleted(res.data.completedCount);
+        });
+    };
 
-        getPostData();
-        getUpcommingData();
-  },[user]) 
+    getPostData();
+    getUpcommingData();
+  }, [user]);
 
   const handleClickNotification = () => {
-    navigate('/notifications')
-  }
+    navigate("/notifications");
+  };
 
   const handleClickUpcomming = () => {
-    navigate('/upcomming')
+    navigate("/upcomming");
+  };
+
+  const handleClickPosts = () => {
+    navigate('/posts')
   }
 
-  
+  const handleClickInterviews = () => {
+    navigate('/interviews')
+  }
 
   return (
     <Grid container>
@@ -73,7 +75,7 @@ function Aside() {
         <Paper
           sx={{
             m: "80px auto",
-            elevalation: 10,
+            elevalation: 10, 
             borderRadius: "15px",
             width: "72%",
           }}
@@ -96,7 +98,7 @@ function Aside() {
             ></Box>
             <Paper sx={{ width: 120, m: "0 auto", borderRadius: 15 }}>
               <Avatar
-                src={user && user.profileImg}
+                src={user && user?.profileImg}
                 sx={{ width: 120, height: 120, m: "-55px auto", elevation: 10 }}
               />
             </Paper>
@@ -113,7 +115,7 @@ function Aside() {
                 textAlign="center"
                 fontFamily="Poppins, sans-serif"
               >
-                {user.name ? user.name : name}
+                {user?.name }
               </Typography>
               <Typography
                 fontSize={{ sm: "0.9rem" }}
@@ -121,7 +123,7 @@ function Aside() {
                 textAlign="center"
                 mb={1}
               >
-                {user && user.about}
+                {user && user?.about}
               </Typography>
             </Box>
             <Box
@@ -153,40 +155,10 @@ function Aside() {
                   m: "0 auto",
                 }}
               >
-                <Typography fontSize={{ sm: "1rem" }} mt={1}>
-                  Posts
+                <Typography fontSize={{ sm: "1rem" }} mt={1} mb={2}>
+                  Pending Requests
                 </Typography>
-                <Typography fontSize={{ sm: "1rem" }} mt={1}>
-                  {postCount}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "80%",
-                  m: "0 auto",
-                }}
-              >
-                <Typography fontSize={{ sm: "1rem" }} mt={1}>
-                  Interviews
-                </Typography>
-                <Typography fontSize={{ sm: "1rem" }} mt={1}>
-                  {completed}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "80%",
-                  m: "0 auto",
-                }}
-              >
-                <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1.5}>
-                Pending Requests
-                </Typography>
-                <Typography fontSize={{ sm: "1rem" }} mt={1} mb={1.5}>
+                <Typography fontSize={{ sm: "1rem" }} mt={1} mb={2}>
                   {pending}
                 </Typography>
               </Box>
@@ -196,11 +168,23 @@ function Aside() {
                 sx={{
                   width: "80%",
                   m: "0 auto",
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
-                <Typography onClick={handleClickNotification} fontSize={{ sm: "1rem", cursor: "pointer" }} mt={2}>
-                  Notifications
-                </Typography>
+                <Box width="20%">
+                  <NotificationsActiveIcon sx={{ fontSize: 23, mt: 2 }} />
+                </Box>
+                <Box width="65%">
+                  <Typography
+                    onClick={handleClickNotification}
+                    textAlign="left"
+                    fontSize={{ sm: "1rem", cursor: "pointer" }}
+                    mt={2}
+                  >
+                    Notifications
+                  </Typography>
+                </Box>
               </Box>
               <Box
                 sx={{
@@ -210,14 +194,52 @@ function Aside() {
                   m: "0 auto",
                 }}
               >
-                <Typography
-                 onClick = {handleClickUpcomming}
-                  fontSize={{ sm: "1rem", cursor: "pointer" }}
-                  mt={1}
-                  mb={1.5}
-                >
-                  Upcomming
-                </Typography>
+                <Box width="20%">
+                  <UpcomingIcon sx={{ fontSize: 23, mt: 2 }} />
+                </Box>
+                <Box width="65%">
+                  <Typography
+                    onClick={handleClickUpcomming}
+                    fontSize={{ sm: "1rem", cursor: "pointer" }}
+                    mt={2}
+                  >
+                    Upcomming
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "80%",
+                  m: "0 auto",
+                }}
+              >
+                <Box width="20%">
+                  <DynamicFeedIcon sx={{ fontSize: 23, mt: 2 }} />
+                </Box>
+                <Box width="65%">
+                  <Typography onClick={handleClickPosts} fontSize={{ sm: "1rem", cursor:"pointer" }} mt={2}>
+                    My Posts
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "80%",
+                  m: "0 auto",
+                }}
+              >
+                <Box width="20%">
+                  <SensorOccupiedIcon sx={{ fontSize: 23, mt: 2 }} />
+                </Box>
+                <Box width="65%">
+                  <Typography onClick={handleClickInterviews} fontSize={{ sm: "1rem", cursor:"pointer" }} mt={2}>
+                    My Interviews
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           </Box>

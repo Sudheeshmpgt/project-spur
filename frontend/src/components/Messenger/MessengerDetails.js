@@ -22,7 +22,7 @@ function MessengerDetails() {
     const [messages, setMessages] = React.useState([])
     const [socketConnected, setSocketConnected] = useState(false)
     const scrollRef = useRef()
-
+ 
     useEffect(()=>{
         socket = io(ENDPOINT)
         socket.emit("setup",currentUser)

@@ -53,6 +53,25 @@ const interviewSchema = new mongoose.Schema(
     },
     status:{
       type: String,
+    },
+    feedback:{
+      type: String,
+    },
+    splitPercent:{
+      type: Number,
+      default:10,
+    },
+    interviewerFee:{
+      type: Number,
+      default:0
+    },
+    adminProfit:{
+      type:Number,
+      default:0
+    },
+    creditStatus:{
+      type:Boolean,
+      default:false,
     }
   },{ timestamps: true }
 );

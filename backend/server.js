@@ -20,6 +20,9 @@ app.use('/api/payment', require('./server/router/razorpayRouter'))
 app.use('/api/admin', require('./server/router/adminRouter'))
 app.use('/api/admin/manage/user', require('./server/router/userManagementRouter'))
 app.use('/api/admin/manage/interviewer', require('./server/router/interviewerManagementRouter'))
+app.use('/api/admin/manage/interview', require('./server/router/interviewManagementRoute'))
+app.use('/api/interviewer/wallet', require('./server/router/walletRouter'))
+app.use('/api/chart', require('./server/router/chartRouter'))
 
 
 const server = app.listen(PORT, () => { 

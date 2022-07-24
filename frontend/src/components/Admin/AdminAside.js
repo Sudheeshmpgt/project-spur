@@ -5,6 +5,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 
 function AdminAside() {
   const navigate = useNavigate();
@@ -24,6 +25,14 @@ function AdminAside() {
     navigate("/admin/interviewer")
   };
 
+  const handleInterviewClick = () => {
+    navigate("/admin/interview")
+  }
+
+  const handleReportClick = () => {
+    navigate("/admin/report")
+  }
+
   return (
     <Grid container>
       <Box width="100%">
@@ -38,7 +47,7 @@ function AdminAside() {
           <Box
             sx={{
               width: "100%",
-              height: "60vh",
+              height: "65vh",
               backgroundColor: "secondary.main",
               borderRadius: "15px",
             }}
@@ -85,7 +94,7 @@ function AdminAside() {
                 <Box width="30%">
                   <DashboardIcon sx={{ fontSize: 23, mt: 2.25, mb: 1 }} />
                 </Box>
-                <Box width="70%">
+                <Box width="70%" sx={{cursor:"pointer"}}>
                   <Typography fontSize={{ sm: "1.25rem" }} mt={2}>
                     Dashboard
                   </Typography>
@@ -140,9 +149,26 @@ function AdminAside() {
                 }}
               >
                 <Box width="30%">
+                  <SensorOccupiedIcon sx={{ fontSize: 25, mt: 2.25, mb: 1 }} />
+                </Box>
+                <Box width="70%" onClick={handleInterviewClick} sx={{cursor:"pointer"}}>
+                  <Typography textAlign="" fontSize={{ sm: "1.25rem" }} mt={2}>
+                    Interviews
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "80%",
+                  m: "0 auto",
+                }}
+              >
+                <Box width="30%">
                   <AssignmentIcon sx={{ fontSize: 25, mt: 2.25, mb: 1 }} />
                 </Box>
-                <Box width="70%">
+                <Box width="70%" onClick={handleReportClick} sx={{cursor:"pointer"}}>
                   <Typography textAlign="" fontSize={{ sm: "1.25rem" }} mt={2}>
                     Report
                   </Typography>

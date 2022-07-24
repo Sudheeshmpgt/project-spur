@@ -14,11 +14,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import Toast from "../../Sweetalert/sweetAlert";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
-import "../../common/Scroll.css";
+import '../../common/Scroll.css'
 
 function Report() {
     const user = useSelector((state) => state.userData.value);
-    const [request, setRequest] = useState([]);
+    const [interviews, setInterviews] = useState([]);
     const navigate = useNavigate(); 
   
     const handleCloseClick = () => {
@@ -29,13 +29,13 @@ function Report() {
   
     useEffect(() => {
       axios
-        .get(`api/interview/${user._id}`, {
-          headers: {
-            authToken: localStorage.getItem("usertoken"),
-          },
+        .get(`/api/admin/manage/interview`, {
+            headers: {
+                authToken: localStorage.getItem("admintoken"),
+              },
         })
         .then((res) => {
-          setRequest(res.data.requests);
+          setInterviews(res.data.interviews);
         })
         .catch((err) => {
           Toast.fire({
@@ -54,24 +54,17 @@ function Report() {
         width: 75,
       },
       {
-        field: "name",
+        field: "interviewee",
         headerClassName: "super-app-theme--header",
-        headerName: "Name",
+        headerName: "Interviewee",
         width: 165,
         editable: true,
       },
       {
-        field: "about",
+        field: "interviewer",
         headerClassName: "super-app-theme--header",
-        headerName: "About",
+        headerName: "Interviewer",
         width: 140,
-        editable: true,
-      },
-      {
-        field: "phone",
-        headerClassName: "super-app-theme--header",
-        headerName: "Phone",
-        width: 130,
         editable: true,
       },
       {
@@ -90,32 +83,47 @@ function Report() {
         editable: true,
       },
       {
-        field: "fee",
-        headerClassName: "super-app-theme--header",
-        headerName: "Fee",
-        type: "number",
-        width: 100,
-        editable: true,
-      },
-      {
         field: "status",
         headerClassName: "super-app-theme--header",
         headerName: "Status",
         width: 140,
         editable: true,
       },
+      {
+        field: "interviewerFee",
+        headerClassName: "super-app-theme--header",
+        headerName: "InterviewerFee",
+        type: "number",
+        width: 100,
+        editable: true,
+      },
+      {
+        field: "profit",
+        headerClassName: "super-app-theme--header",
+        headerName: "Profit",
+        width: 130,
+        editable: true,
+      },
+      {
+        field: "total",
+        headerClassName: "super-app-theme--header",
+        headerName: "Total",
+        width: 140,
+        editable: true,
+      },
     ];
   
   
-    const rows = request.map((data, index) => ({
+    const rows = interviews.map((data, index) => ({
       id: index + 1,
-      name: data.userId.name,
-      about: data.userId.about,
-      phone: data.userId.phone,
+      interviewee: data?.userId?.name,
+      interviewer: data?.interviewerId?.about,
       date: dayjs(data.date).format("MMM, DD YYYY"),
       time: dayjs(data.time).format("hh:mm a"),
-      fee:  data.status === 'Cancelled' ? "-" : (data.creditStatus ? `Rs. ${data.interviewerFee}` : `Pending`),
-      status: data.status 
+      status: data?.status,
+      interviewerFee:`Rs. ${data?.interviewerFee}`,
+      profit:`Rs. ${data?.adminProfit}`,
+      total: data?.status ==='Cancelled'? 'Rs.0' : `Rs. ${data?.amount}`
     }));
   
     return (
@@ -182,6 +190,5 @@ function Report() {
       </Grid>
     );
   }
-  
 
 export default Report

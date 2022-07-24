@@ -42,7 +42,7 @@ const updateUserData = async(req, res) => {
 
       const updatedUser = await user.save();
       const users = await UserModel.find({interviewer:false})
-      res.status(200).send({ message: "User Updated Successfully", user: users });
+      res.status(200).send({ message: "User Updated Successfully", user: users });   
     } else {
       res.status(404).send({ message: "User not found" });
     }
